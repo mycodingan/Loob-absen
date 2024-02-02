@@ -49,22 +49,28 @@ class AbsenController extends Controller
             'Nama_Karyawan' => 'required',
             'cabang' => 'required',
             'posisi_jabatan' => 'required',
+            'hari'=>'required',
             'tahun' => 'required',
             'Bulan' => 'required',
         ]);
     
-        $dataToUpdate = [];
-        for ($i = 1; $i <= 31; $i++) {
-            $fieldName = 'hari' . $i;
-            if ($request->has($fieldName)) {
-                $dataToUpdate[$fieldName] = $request->$fieldName;
+        try {
+            $dataToUpdate = [];
+            for ($i = 1; $i <= 31; $i++) {
+                $fieldName = 'hari' . $i;
+                if ($request->has($fieldName)) {
+                    $dataToUpdate[$fieldName] = $request->$fieldName;
+                }
             }
+    
+            $absen->update($request->only(['No_absen', 'Nama_Karyawan', 'cabang', 'posisi_jabatan', 'tahun', 'Bulan']) + $dataToUpdate);
+    
+            return response()->json(['message' => 'Data absen berhasil diperbarui.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
-    
-        $absen->update($request->only(['No_absen', 'Nama_Karyawan', 'cabang', 'posisi_jabatan', 'tahun', 'Bulan']) + $dataToUpdate);
-    
-        return response()->json(['message' => 'Data absen berhasil diperbarui.']);
     }
+    
     
     
 
