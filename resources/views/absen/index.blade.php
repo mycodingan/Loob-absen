@@ -20,11 +20,12 @@
                                 <th>Nama Karyawan</th>
                                 <th>Cabang</th>
                                 <th>Posisi Jabatan</th>
-                                @for ($i = 1; $i <= $daysInMonth; $i++) <th>hari{{ $i }}</th>
-                                    @endfor
-                                    <th>Tahun</th>
-                                    <th>Bulan</th>
-                                    <th>Action</th>
+                                @for ($i = 1; $i <= $daysInMonth; $i++)
+                                    <th>Hari {{ $i }}</th>
+                                @endfor
+                                <th>Tahun</th>
+                                <th>Bulan</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -34,20 +35,22 @@
                                 <td>{{ $data->Nama_Karyawan }}</td>
                                 <td>{{ $data->cabang }}</td>
                                 <td>{{ $data->posisi_jabatan }}</td>
-                                @for ($i = 1; $i <= $daysInMonth; $i++) <td>
-                                    {{ $data['hari' . $i]}}
+                                @for ($i = 1; $i <= $daysInMonth; $i++)
+                                    <td class="editable" data-absen-id="{{ $data->id }}" data-day="{{ $i }}">
+                                        <input type="hidden" class="form-control" name="hari{{ $i }}" value="{{ $data->{'hari' . $i} }}">
+                                        <span>{{ $data->{'hari' . $i} }}</span>
                                     </td>
-                                    @endfor
-                                    <td>{{ $data->tahun }}</td>
-                                    <td>{{ $data->Bulan }}</td>
-                                    <td>
-                                        <form action="{{ route('absen.destroy', $data->id) }}" method="POST" style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
-                                        </form>
-                                        <button class="btn btn-sm btn-primary edit-absen" data-absen_id="{{ $data->id }}">Edit</button>
-                                    </td>
+                                @endfor
+                                <td>{{ $data->tahun }}</td>
+                                <td>{{ $data->Bulan }}</td>
+                                <td>
+                                    <form action="{{ route('absen.destroy', $data->id) }}" method="POST" style="display: inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
+                                    </form>
+                                    <input type="checkbox" class="edit-checkbox" data-absen-id="{{ $data->id }}"> Edit
+                                </td>
                             </tr>
                             @endforeach
                             <tr class="add-row">
@@ -57,13 +60,14 @@
                                     <td><input type="text" class="form-control" name="Nama_Karyawan" required></td>
                                     <td><input type="text" class="form-control" name="cabang" required></td>
                                     <td><input type="text" class="form-control" name="posisi_jabatan" required></td>
-                                    @for ($i = 1; $i <= $daysInMonth; $i++) <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
-                                        @endfor
-                                        <td><input type="text" class="form-control" name="tahun" required></td>
-                                        <td><input type="text" class="form-control" name="Bulan" required></td>
-                                        <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
+                                    @for ($i = 1; $i <= $daysInMonth; $i++)
+                                        <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
+                                    @endfor
+                                    <td><input type="text" class="form-control" name="tahun" required></td>
+                                    <td><input type="text" class="form-control" name="Bulan" required></td>
+                                    <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
+                                </form>
                             </tr>
-                            </form>
                         </tbody>
                     </table>
                 </div>
@@ -71,52 +75,50 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js"></script>
+
 <script>
     $(document).ready(function() {
-        $('.edit-absen').click(function() {
-            var absen_id = $(this).data('absen_id');
-            $(this).closest('tr').find('td').each(function() {
-                var field_name = $(this).data('field');
-                var field_value = $(this).text();
-                var select_html = '<select class="form-control select-hari" data-absen_id="' + absen_id + '" data-field="' + field_name + '">';
-                select_html += '<option value="">' + field_value + '</option>';
-                select_html += '<option value="1" ' + (field_value === '1' ? 'selected' : '') + '>1</option>';
-                select_html += '<option value="2" ' + (field_value === '2' ? 'selected' : '') + '>2</option>';
-                select_html += '<option value="ls" ' + (field_value === 'ls' ? 'selected' : '') + '>LS</option>';
-                select_html += '<option value="off" ' + (field_value === 'off' ? 'selected' : '') + '>Off</option>';
-                select_html += '<option value="cuti" ' + (field_value === 'cuti' ? 'selected' : '') + '>Cuti</option>';
-                select_html += '</select>';
-                $(this).html(select_html);
-            });
-            $(this).removeClass('edit-absen').addClass('save-edit-absen').text('Simpan');
+        $('.edit-checkbox').change(function() {
+            var $row = $(this).closest('tr');
+            if ($(this).is(":checked")) {
+                $row.find('.editable').each(function() {
+                    var $input = $('<input type="text" class="form-control">').val($(this).find('span').text());
+                    $(this).empty().append($input);
+                });
+            } else {
+                $row.find('.editable').each(function() {
+                    var $span = $('<span>').text($(this).find('input').val());
+                    $(this).empty().append($span);
+                });
+            }
         });
 
-        $('body').on('click', '.save-edit-absen', function() {
-            var absen_id = $(this).data('absen_id');
-            var data = {
-                _token: '{{ csrf_token() }}'
-                , _method: 'PUT'
-            };
-            $(this).closest('tr').find('select').each(function() {
-                data[$(this).data('field')] = $(this).val();
-            });
-            $.ajax({
-                url: '/absen/' + absen_id
-                , type: 'POST'
-                , data: data
-                , success: function(response) {
-                    console.log(response);
-                    $('.save-edit-absen').removeClass('save-edit-absen').addClass('edit-absen').text('Edit');
-                }
-                , error: function(xhr) {
-                    console.log(xhr.responseText);
-                }
-            });
-        });
-    });
+        $(document).on('keypress', '.editable input', function(event) {
+            if (event.which === 13) {
+                var $editable = $(this).closest('.editable');
+                var absen_id = $editable.data('absen-id');
+                var day = $editable.data('day');
+                var value = $(this).val();
+                $.ajax({
+                    url: '/Absen/public/absen/' + absen_id
+                    , method: 'PUT'
+                    , data: {
+                        _token: '{{ csrf_token() }}'
+                        , hari: value
+                        , day: day
+                    }
+                    , success: function(response) {
+                        $editable.empty().append('<span>' + value + '</span>');
+                    }
+                    , error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
 
-</script>
+            }
+        });
+    }); 
+</script>   
 @endsection
-
-@push('scripts')
-@endpush

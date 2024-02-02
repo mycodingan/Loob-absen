@@ -10,16 +10,14 @@ class AbsenController extends Controller
 {
     public function index()
     {
-        $daysInMonth = Carbon::now()->daysInMonth;        
-            $absen = Absen::all();
-            return view('absen.index', compact('absen', 'daysInMonth'));
-        }
-
+        $daysInMonth = Carbon::now()->daysInMonth;
+        $absen = Absen::all();
+        return view('absen.index', compact('absen', 'daysInMonth'));
+    }
     public function create()
     {
         return view('absen.create');
     }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -32,28 +30,28 @@ class AbsenController extends Controller
         ]);
 
         Absen::create($request->all());
-// dd($request);
         return redirect()->route('absen.index')
             ->with('success', 'Data absen berhasil ditambahkan.');
     }
- 
     public function edit(Absen $absen)
     {
-        return view('absen.edit', compact('absen'));
+        return view('absen.Index', compact('absen'));
+    }
+    public function show(Absen $absen)
+    {
+            // dd($absen);
+            $daysInMonth = Carbon::now()->daysInMonth;
+            $absen = Absen::all();
+    
+        return view('absen.Index' ,compact('absen', 'daysInMonth'));
     }
 
     public function update(Request $request, Absen $absen)
     {
         $request->validate([
-            'No_absen' => 'required',
-            'Nama_Karyawan' => 'required',
-            'cabang' => 'required',
-            'posisi_jabatan' => 'required',
-            'hari'=>'required',
-            'tahun' => 'required',
-            'Bulan' => 'required',
+            'hari' => 'required',
         ]);
-    
+
         try {
             $dataToUpdate = [];
             for ($i = 1; $i <= 31; $i++) {
@@ -62,18 +60,14 @@ class AbsenController extends Controller
                     $dataToUpdate[$fieldName] = $request->$fieldName;
                 }
             }
-    
+
             $absen->update($request->only(['No_absen', 'Nama_Karyawan', 'cabang', 'posisi_jabatan', 'tahun', 'Bulan']) + $dataToUpdate);
-    
+
             return response()->json(['message' => 'Data absen berhasil diperbarui.']);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
     }
-    
-    
-    
-
     public function destroy(Absen $absen)
     {
         $absen->delete();
