@@ -35,33 +35,36 @@ class AbsenController extends Controller
     }
     public function edit(Absen $absen)
     {
-        return view('absen.Index', compact('absen'));
+        $daysInMonth = Carbon::now()->daysInMonth;
+        $absen = Absen::all();
+
+        return view('absen.Index', compact('absen', 'daysInMonth'));
     }
     public function show(Absen $absen)
     {
-            // dd($absen);
-            $daysInMonth = Carbon::now()->daysInMonth;
-            $absen = Absen::all();
-    
-        return view('absen.Index' ,compact('absen', 'daysInMonth'));
+        $daysInMonth = Carbon::now()->daysInMonth;
+        $absen = Absen::all();
+
+        return view('absen.Index', compact('absen', 'daysInMonth'));
     }
 
     public function update(Request $request, Absen $absen)
     {
         $request->validate([
-            'hari' => 'required',
+            'hari' => 'required|array',
         ]);
 
         try {
             $dataToUpdate = [];
-            for ($i = 1; $i <= 31; $i++) {
-                $fieldName = 'hari' . $i;
-                if ($request->has($fieldName)) {
-                    $dataToUpdate[$fieldName] = $request->$fieldName;
-                }
-            }
 
-            $absen->update($request->only(['No_absen', 'Nama_Karyawan', 'cabang', 'posisi_jabatan', 'tahun', 'Bulan']) + $dataToUpdate);
+            foreach ($request->hari as $key => $val) {
+                // if (strpos($day, 'hari') === 0 && is_numeric(substr($day, 4))) {
+                //     $dataToUpdate[$day] = $value;
+                // }
+                $dataToUpdate['hari'.$key] = $val;
+                $absen->update($dataToUpdate);
+            }
+            // $dataToUpdate['hari'.$]
 
             return response()->json(['message' => 'Data absen berhasil diperbarui.']);
         } catch (\Exception $e) {
