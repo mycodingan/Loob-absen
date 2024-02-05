@@ -25,6 +25,7 @@ class CreateAbsenTable extends Migration
             }
             $table->string('tahun');
             $table->string('Bulan');
+            // $table->timestamp('created_at');
         });
     }
 

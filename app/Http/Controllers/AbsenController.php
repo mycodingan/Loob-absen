@@ -18,7 +18,7 @@ class AbsenController extends Controller
     {
         return view('absen.create');
     }
-    public function store(Request $request)
+        public function store(Request $request)
     {
         $request->validate([
             'No_absen' => 'required|unique:absen',
@@ -33,6 +33,7 @@ class AbsenController extends Controller
         return redirect()->route('absen.index')
             ->with('success', 'Data absen berhasil ditambahkan.');
     }
+    
     public function edit(Absen $absen)
     {
         $daysInMonth = Carbon::now()->daysInMonth;
@@ -61,7 +62,7 @@ class AbsenController extends Controller
                 // if (strpos($day, 'hari') === 0 && is_numeric(substr($day, 4))) {
                 //     $dataToUpdate[$day] = $value;
                 // }
-                $dataToUpdate['hari'.$key] = $val;
+                $dataToUpdate['hari'.$key] = $val; //ambil data dari variabel key dan menjadikan nya sebuah value
                 $absen->update($dataToUpdate);
             }
             // $dataToUpdate['hari'.$]

@@ -6,7 +6,6 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Absen</div>
-
                 <div class="card-body">
                     @if(session('success'))
                     <div class="alert alert-success" role="alert">
@@ -59,8 +58,8 @@
                                     <td><input type="text" class="form-control" name="posisi_jabatan" required></td>
                                     @for ($i = 1; $i <= $daysInMonth; $i++) <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
                                         @endfor
-                                        <td><input type="text" class="form-control" name="tahun" required></td>
-                                        <td><input type="text" class="form-control" name="Bulan" required></td>
+                                        <td><input type="text" name="tahun" value="{{ \Carbon\Carbon::now()->year }}"></td>
+                                        <td><input type="tex" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
                                         <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
                                 </form>
                             </tr>
