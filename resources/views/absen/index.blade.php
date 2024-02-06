@@ -49,51 +49,56 @@
     .modal-footer .btn-secondary {
         background-color: #aaa;
     }
+
     table {
-    width: 100%;
-    /* border-collapse: collapse; */
-    /* border: blue; */
-}
-
-th, td {
-    padding: 2px;
-    text-align: left;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #66768a; 
-    color: white;
-    border-color: black;
-}
-
-tbody tr:nth-child(odd) {
-    background-color: #dcdde1; 
-}
-
-@media screen and (max-width: 600px) {
-    table {
-        border: 0;
+        width: 100%;
+        /* border-collapse: collapse; */
+        /* border: blue; */
     }
-    table thead {
-        display: none;
-    }
-    table tr {
-        margin-bottom: 10px;
-        display: block;
-        border-bottom: 2px solid #ccc;
-    }
-    table td {
-        display: block;
-        text-align: right;
-        font-size: 13px;
-    }
-    table td::before {
-        content: attr(data-label);
-        float: left;
-        font-weight: bold;
-    }
-}
 
+    th,
+    td {
+        padding: 2px;
+        text-align: left;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #66768a;
+        color: white;
+        border-color: black;
+    }
+
+    tbody tr:nth-child(odd) {
+        background-color: #dcdde1;
+    }
+
+    @media screen and (max-width: 600px) {
+        table {
+            border: 0;
+        }
+
+        table thead {
+            display: none;
+        }
+
+        table tr {
+            margin-bottom: 10px;
+            display: block;
+            border-bottom: 2px solid #ccc;
+        }
+
+        table td {
+            display: block;
+            text-align: right;
+            font-size: 13px;
+        }
+
+        table td::before {
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+        }
+    }
 
 </style>
 <div class=" container-fluid">
@@ -102,7 +107,7 @@ tbody tr:nth-child(odd) {
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Import Data Absen</div>
-    
+
                     <div class="card-body">
                         @if ($errors->any())
                         <div class="alert alert-danger">
@@ -113,19 +118,19 @@ tbody tr:nth-child(odd) {
                             </ul>
                         </div>
                         @endif
-    
+
                         @if (session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
                         </div>
                         @endif
-    
+
                         @if (session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
                         </div>
                         @endif
-    
+
                         <button type="button" class="btn btn-primary" id="importBtn">Import Data</button>
                         <a href="{{ route('absen.export') }}" class="btn btn-primary">export </a>
                     </div>
@@ -133,8 +138,7 @@ tbody tr:nth-child(odd) {
             </div>
         </div>
     </div>
-    <div class="modal" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
-        aria-hidden="true">
+    <div class="modal" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -144,10 +148,9 @@ tbody tr:nth-child(odd) {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="importForm" action="{{ route('absen.import') }}" method="POST"
-                        enctype="multipart/form-data">
+                    <form id="importForm" action="{{ route('absen.import') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-    
+
                         <div class="form-group">
                             <label for="file">Pilih File Excel:</label>
                             <input type="file" class="form-control-file" id="file" name="file">
@@ -173,60 +176,85 @@ tbody tr:nth-child(odd) {
                     </div>
                     @endif
                     <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>No Absen</th>
-                                <th>Nama Karyawan</th>
-                                <th>Cabang</th>
-                                <th>Posisi Jabatan</th>
-                                @for ($i = 1; $i <= $daysInMonth; $i++) <th>Hari {{ $i }}</th>
-                                    @endfor
-                                    <th>Tahun</th>
-                                    <th>Bulan</th>
-                                    <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($absen as $data)
-                            <tr>
-                                <td>{{ $data->No_absen }}</td>
-                                <td>{{ $data->Nama_Karyawan }}</td>
-                                <td>{{ $data->cabang }}</td>
-                                <td>{{ $data->posisi_jabatan }}</td>
-                                @for ($i = 1; $i <= $daysInMonth; $i++) <td class="editable" data-absen-id="{{ $data->id }}" data-day="{{ $i }}">
-                                    <span>{{ $data->{'hari' . $i} }}</span>
-                                    </td>
-                                    @endfor
-                                    <td>{{ $data->tahun }}</td>
-                                    <td>{{ $data->Bulan }}</td>
-                                    <td>
-                                        <form action="{{ route('absen.destroy', $data->id) }}" method="POST" style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
-                                        </form>
-                                        {{-- <a href="{{ route('absen.edit', $data->id) }}" class="btn btn-sm btn-primary">Edit</a> --}}
-                                    </td>
-                            </tr>
-                            @endforeach
-                            <tr class="add-row">
-                                <form method="POST" action="{{ route('absen.store') }}">
-                                    @csrf
-                                    <td><input type="text" class="form-control" name="No_absen" required></td>
-                                    <td><input type="text" class="form-control" name="Nama_Karyawan" required></td>
-                                    <td><input type="text" class="form-control" name="cabang" required></td>
-                                    <td><input type="text" class="form-control" name="posisi_jabatan" required></td>
-                                    @for ($i = 1; $i <= $daysInMonth; $i++) <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No Absen</th>
+                                    <th>Nama Karyawan</th>
+                                    <th>Cabang</th>
+                                    <th>Posisi Jabatan</th>
+                                    @for ($i = 1; $i <= $daysInMonth; $i++) <th>Hari {{ $i }}</th>
                                         @endfor
-                                        <td><input type="text" name="tahun" value="{{ \Carbon\Carbon::now()->year }}"></td>
-                                        <td><input type="tex" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
-                                        <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
-                                </form>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                        <th>Shift 1</th>
+                                        <th>Shift 2</th>
+                                        <th>Shift 3</th>
+                                        <th>Tahun</th>
+                                        <th>Bulan</th>
+                                        <th>Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($absen as $data)
+                                <tr>
+                                    <td>{{ $data->No_absen }}</td>
+                                    <td>{{ $data->Nama_Karyawan }}</td>
+                                    <td>{{ $data->cabang }}</td>
+                                    <td>{{ $data->posisi_jabatan }}</td>
+                                    @php
+                                    $total_shift_1 = 0;
+                                    $total_shift_2 = 2;
+                                    $total_shift_ls = 3;
+
+                                    @endphp
+                                    @for ($i = 1; $i <= $daysInMonth; $i++) 
+                                        <td class="editable" data-absen-id="{{ $data->id }}" data-day="{{ $i }}">
+                                        @php
+                                        if($data->{'hari' . $i} == 1){
+                                            $total_shift_1++;
+                                        }
+                                        if($data->{'hari' . $i} == 2){
+                                            $total_shift_2++;
+                                        }
+                                        if($data->{'hari' . $i} == 3){
+                                            $total_shift_ls++;
+                                        }
+                                        @endphp
+                                        <span>{{ $data->{'hari' . $i} }}</span>
+                                        </td>
+                                        @endfor
+                                        <td>{{ $total_shift_1 }}</td>
+                                        <td>{{ $total_shift_2 }}</td>
+                                        <td>{{ $total_shift_ls }}</td>
+                                        <td>{{ $data->tahun }}</td>
+                                        <td>{{ $data->Bulan }}</td>
+                                        <td>
+                                            <form action="{{ route('absen.destroy', $data->id) }}" method="POST" style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
+                                            </form>
+                                            {{-- <a href="{{ route('absen.edit', $data->id) }}" class="btn btn-sm btn-primary">Edit</a> --}}
+                                        </td>
+                                </tr>
+                                @endforeach
+                                <tr class="add-row">
+                                    <form method="POST" action="{{ route('absen.store') }}">
+                                        @csrf
+                                        <td><input type="text" class="form-control" name="No_absen" required></td>
+                                        <td><input type="text" class="form-control" name="Nama_Karyawan" required></td>
+                                        <td><input type="text" class="form-control" name="cabang" required></td>
+                                        <td><input type="text" class="form-control" name="posisi_jabatan" required></td>
+                                        @for ($i = 1; $i <= $daysInMonth; $i++) <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
+                                            @endfor
+                                            <td><input type="text" name="tahun" value="{{ \Carbon\Carbon::now()->year }}"></td>
+                                            <td><input type="tex" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
+                                            <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
+                                    </form>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -249,14 +277,12 @@ tbody tr:nth-child(odd) {
             selectOptions += '<option value="1">1</option>';
             selectOptions += '<option value="2">2</option>';
             selectOptions += '<option value="ls">LS</option>';
-            selectOptions += '<option value="off">OFF</option>';
-            selectOptions += '<option value="cuti">Cuti</option>';
             selectOptions += '</select>';
 
             $editable.empty().append(selectOptions);
             $editable.find('select').val(currentValue);
 
-            $editable.find('select').change(function() {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+            $editable.find('select').change(function() {
                 var selectedValue = $(this).val();
                 $.ajax({
                     url: '/Absen/public/absen/' + absen_id
@@ -280,31 +306,30 @@ tbody tr:nth-child(odd) {
             });
         });
     });
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         var importBtn = document.getElementById('importBtn');
         var importModal = document.getElementById('importModal');
         var closeBtn = document.querySelector('.close');
         var closeBtnModalFooter = document.querySelector('.modal-footer .closeBtn');
 
-        importBtn.addEventListener('click', function () {
+        importBtn.addEventListener('click', function() {
             importModal.style.display = 'block';
         });
 
-        closeBtn.addEventListener('click', function () {
+        closeBtn.addEventListener('click', function() {
             importModal.style.display = 'none';
         });
 
-        closeBtnModalFooter.addEventListener('click', function () {
+        closeBtnModalFooter.addEventListener('click', function() {
             importModal.style.display = 'none';
         });
 
-        window.addEventListener('click', function (event) {
+        window.addEventListener('click', function(event) {
             if (event.target == importModal) {
                 importModal.style.display = 'none';
             }
         });
     });
-    
 
 </script>
 @endsection

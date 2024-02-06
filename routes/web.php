@@ -18,6 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/absen/count-by-date', [AbsenController::class, 'countValuesByDate'])->name('absen.count_by_date');
 Route::post('absen/import', [AbsenController::class, 'import'])->name('absen.import');
 Route::get('absen/export', [AbsenController::class, 'export'])->name('absen.export');
 Route::get('/absen', [AbsenController::class, 'index'])->name('absen.index');
