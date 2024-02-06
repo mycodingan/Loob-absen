@@ -18,6 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('absen/import', [AbsenController::class, 'import'])->name('absen.import');
+Route::get('absen/export', [AbsenController::class, 'export'])->name('absen.export');
 Route::get('/absen', [AbsenController::class, 'index'])->name('absen.index');
 Route::post('/absen', [AbsenController::class, 'store'])->name('absen.store');
 Route::get('/absen/{id}/edit', [AbsenController::class, 'edit'])->name('absen.edit');

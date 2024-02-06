@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Absen;
 use Carbon\Carbon;
+use App\Imports\AbsenImport;
+use App\Exports\AbsenExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AbsenController extends Controller
 {
@@ -14,6 +17,35 @@ class AbsenController extends Controller
         $absen = Absen::all();
         return view('absen.index', compact('absen', 'daysInMonth'));
     }
+    public function export()
+    {
+        try {
+            $absen = Absen::all();
+            return Excel::download(new AbsenExport($absen), 'absen.xlsx');
+        } catch (\Exception $e) {
+            return redirect()->route('absen.index')
+                ->with('error', 'Terjadi kesalahan saat mengekspor data: ' . $e->getMessage());
+        }
+    }
+public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        try {
+            Excel::import(new AbsenImport, $request->file('file'));
+
+            return redirect()->route('absen.index')
+                ->with('success', 'Data absen berhasil diimport.');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            return redirect()->route('absen.index')
+                ->with('error', 'Terjadi kesalahan validasi: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            return redirect()->route('absen.index')
+                ->with('error', 'Terjadi kesalahan saat mengimport data: ' . $e->getMessage());
+        }
+    }       
     public function create()
     {
         return view('absen.create');
@@ -59,10 +91,7 @@ class AbsenController extends Controller
             $dataToUpdate = [];
 
             foreach ($request->hari as $key => $val) {
-                // if (strpos($day, 'hari') === 0 && is_numeric(substr($day, 4))) {
-                //     $dataToUpdate[$day] = $value;
-                // }
-                $dataToUpdate['hari'.$key] = $val; //ambil data dari variabel key dan menjadikan nya sebuah value
+                $dataToUpdate['hari'.$key] = $val; 
                 $absen->update($dataToUpdate);
             }
             // $dataToUpdate['hari'.$]

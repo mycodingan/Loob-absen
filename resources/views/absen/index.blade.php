@@ -1,17 +1,178 @@
 @extends('layout.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">Absen</div>
-                <div class="card-body">
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-footer .btn {
+        padding: 10px 24px;
+        background-color: #337ab7;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .modal-footer .btn-secondary {
+        background-color: #aaa;
+    }
+    table {
+    width: 100%;
+    /* border-collapse: collapse; */
+    /* border: blue; */
+}
+
+th, td {
+    padding: 2px;
+    text-align: left;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #66768a; 
+    color: white;
+    border-color: black;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #dcdde1; 
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        border: 0;
+    }
+    table thead {
+        display: none;
+    }
+    table tr {
+        margin-bottom: 10px;
+        display: block;
+        border-bottom: 2px solid #ccc;
+    }
+    table td {
+        display: block;
+        text-align: right;
+        font-size: 13px;
+    }
+    table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+    }
+}
+
+
+</style>
+<div class=" container-fluid">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Import Data Absen</div>
+    
+                    <div class="card-body">
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
+    
+                        @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                        @endif
+    
+                        @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                        @endif
+    
+                        <button type="button" class="btn btn-primary" id="importBtn">Import Data</button>
+                        <a href="{{ route('absen.export') }}" class="btn btn-primary">export </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importModalLabel">Import Data Absen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="importForm" action="{{ route('absen.import') }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+    
+                        <div class="form-group">
+                            <label for="file">Pilih File Excel:</label>
+                            <input type="file" class="form-control-file" id="file" name="file">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" form="importForm" class="btn btn-primary">Import Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class=" container-fluid">
+        <div class=" w-100">
+            <div class="card w-100">
+                <div class="card-header w-100">Absen</div>
+                <div class="card-body w-100">
                     @if(session('success'))
                     <div class="alert alert-success" role="alert">
                         {{ session('success') }}
                     </div>
                     @endif
+                    <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
@@ -66,10 +227,15 @@
                         </tbody>
                     </table>
                 </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -90,7 +256,7 @@
             $editable.empty().append(selectOptions);
             $editable.find('select').val(currentValue);
 
-            $editable.find('select').change(function() {
+            $editable.find('select').change(function() {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                 var selectedValue = $(this).val();
                 $.ajax({
                     url: '/Absen/public/absen/' + absen_id
@@ -114,6 +280,31 @@
             });
         });
     });
+    document.addEventListener('DOMContentLoaded', function () {
+        var importBtn = document.getElementById('importBtn');
+        var importModal = document.getElementById('importModal');
+        var closeBtn = document.querySelector('.close');
+        var closeBtnModalFooter = document.querySelector('.modal-footer .closeBtn');
+
+        importBtn.addEventListener('click', function () {
+            importModal.style.display = 'block';
+        });
+
+        closeBtn.addEventListener('click', function () {
+            importModal.style.display = 'none';
+        });
+
+        closeBtnModalFooter.addEventListener('click', function () {
+            importModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function (event) {
+            if (event.target == importModal) {
+                importModal.style.display = 'none';
+            }
+        });
+    });
+    
 
 </script>
 @endsection
