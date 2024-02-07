@@ -29,5 +29,4 @@ Route::get('/absen/{id}/edit', [AbsenController::class, 'edit'])->name('absen.ed
 Route::get('/absen/{absen}', [AbsenController::class, 'show'])->name('absen.show');
 Route::put('/absen/{absen}', [AbsenController::class, 'update'])->name('absen.update');
 Route::delete('/absen/{absen}', [AbsenController::class, 'destroy'])->name('absen.destroy');
-
     

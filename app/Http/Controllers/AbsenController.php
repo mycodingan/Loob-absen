@@ -101,7 +101,7 @@ class AbsenController extends Controller
         $daysInMonth = Carbon::now()->daysInMonth;
         $absen = Absen::all();
 
-        return view('absen.Index', compact('absen', 'daysInMonth'));
+        return view('absen.Index', compact('absen', 'daysInMonth'));    
     }
 
     public function update(Request $request, Absen $absen)
