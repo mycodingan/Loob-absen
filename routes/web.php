@@ -18,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
+Route::post('/absens/search', [AbsenController::class, 'search'])->name('absen.search');
 Route::resource('absen', AbsenController::class)->except(['update']);
 Route::get('/absen/count-by-date', [AbsenController::class, 'countValuesByDate'])->name('absen.count_by_date');
 Route::post('absen/import', [AbsenController::class, 'import'])->name('absen.import');
