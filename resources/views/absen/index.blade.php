@@ -183,49 +183,56 @@
                                     <th>Nama Karyawan</th>
                                     <th>Cabang</th>
                                     <th>Posisi Jabatan</th>
-                                    @for ($i = 1; $i <= $daysInMonth; $i++) <th>Hari {{ $i }}</th>
-                                        @endfor
-                                        <th>Shift 1</th>
-                                        <th>Shift 2</th>
-                                        <th>Shift 3</th>
-                                        <th>Tahun</th>
-                                        <th>Bulan</th>
-                                        <th>Action</th>
-
+                                    @for ($i = 1; $i <= $daysInMonth; $i++)
+                                        <th>Hari {{ $i }}</th>
+                                    @endfor
+                                    <th>Shift 1</th>
+                                    <th>Shift 2</th>
+                                    <th>Shift ls</th>
+                                    <th> 1 (jm)</th>
+                                    <th> 2 (jm)</th>
+                                    <th> ls (jm)</th>
+                                    <th>Total (JT)</th>
+                                    <th>Tahun</th>
+                                    <th>Bulan</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($absen as $data)
-                                <tr>
-                                    <td>{{ $data->No_absen }}</td>
-                                    <td>{{ $data->Nama_Karyawan }}</td>
-                                    <td>{{ $data->cabang }}</td>
-                                    <td>{{ $data->posisi_jabatan }}</td>
-                                    @php
-                                    $total_shift_1 = 0;
-                                    $total_shift_2 = 2;
-                                    $total_shift_ls = 3;
-
-                                    @endphp
-                                    @for ($i = 1; $i <= $daysInMonth; $i++) 
-                                        <td class="editable" data-absen-id="{{ $data->id }}" data-day="{{ $i }}">
+                                    <tr>
+                                        <td>{{ $data->No_absen }}</td>
+                                        <td>{{ $data->Nama_Karyawan }}</td>
+                                        <td>{{ $data->cabang }}</td>
+                                        <td>{{ $data->posisi_jabatan }}</td>
                                         @php
-                                        if($data->{'hari' . $i} == 1){
-                                            $total_shift_1++;
-                                        }
-                                        if($data->{'hari' . $i} == 2){
-                                            $total_shift_2++;
-                                        }
-                                        if($data->{'hari' . $i} == 3){
-                                            $total_shift_ls++;
-                                        }
+                                            $total_shift_1 = null;
+                                            $total_shift_2 = null;
+                                            $total_shift_ls = null;
                                         @endphp
-                                        <span>{{ $data->{'hari' . $i} }}</span>
-                                        </td>
+                                        @for ($i = 1; $i <= $daysInMonth; $i++)
+                                            <td class="editable" data-absen-id="{{ $data->id }}" data-day="{{ $i }}">
+                                                @php
+                                                    if ($data->{'hari' . $i} == 1) {
+                                                        $total_shift_1++;
+                                                    }
+                                                    if ($data->{'hari' . $i} == 2) {
+                                                        $total_shift_2++;
+                                                    }
+                                                    if ($data->{'hari' . $i} == 'ls') {
+                                                        $total_shift_ls++;
+                                                    }
+                                                @endphp
+                                                <span>{{ $data->{'hari' . $i} }}</span>
+                                            </td>
                                         @endfor
                                         <td>{{ $total_shift_1 }}</td>
                                         <td>{{ $total_shift_2 }}</td>
                                         <td>{{ $total_shift_ls }}</td>
+                                        <td id="total_shift_1_jt">{{ $total_shift_1 * 7 }}</td>
+                                        <td id="total_shift_2_jt">{{ $total_shift_2 * 7 }}</td>
+                                        <td id=" total_shift_ls">{{ $total_shift_ls * 8 }}</td>
+                                        <td id="total_jt">{{ ($total_shift_1 * 7) + ($total_shift_2 * 7) + ($total_shift_ls * 8) }}</td>
                                         <td>{{ $data->tahun }}</td>
                                         <td>{{ $data->Bulan }}</td>
                                         <td>
@@ -234,9 +241,8 @@
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
                                             </form>
-                                            {{-- <a href="{{ route('absen.edit', $data->id) }}" class="btn btn-sm btn-primary">Edit</a> --}}
                                         </td>
-                                </tr>
+                                    </tr>
                                 @endforeach
                                 <tr class="add-row">
                                     <form method="POST" action="{{ route('absen.store') }}">
@@ -245,15 +251,16 @@
                                         <td><input type="text" class="form-control" name="Nama_Karyawan" required></td>
                                         <td><input type="text" class="form-control" name="cabang" required></td>
                                         <td><input type="text" class="form-control" name="posisi_jabatan" required></td>
-                                        @for ($i = 1; $i <= $daysInMonth; $i++) <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
-                                            @endfor
-                                            <td><input type="text" name="tahun" value="{{ \Carbon\Carbon::now()->year }}"></td>
-                                            <td><input type="tex" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
-                                            <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
+                                        @for ($i = 1; $i <= $daysInMonth; $i++)
+                                            <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
+                                        @endfor
+                                        <td><input type="text" name="tahun" value="{{ \Carbon\Carbon::now()->year }}"></td>
+                                        <td><input type="tex" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
+                                        <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
                                     </form>
                                 </tr>
                             </tbody>
-                        </table>
+                        </table>                                               
                     </div>
                 </div>
             </div>

@@ -81,26 +81,54 @@ public function import(Request $request)
         return view('absen.Index', compact('absen', 'daysInMonth'));
     }
 
-    public function update(Request $request, Absen $absen)
-    {
-        $request->validate([
-            'hari' => 'required|array',
-        ]);
+public function update(Request $request, Absen $absen)
+{
+    $request->validate([
+        'hari' => 'required|array',
+    ]);
 
-        try {
-            $dataToUpdate = [];
+    try {
+        $dataToUpdate = [];
+        $total_shift_1 = 0;
+        $total_shift_2 = 0;
+        $total_shift_ls = 0;
 
-            foreach ($request->hari as $key => $val) {
-                $dataToUpdate['hari'.$key] = $val; 
-                $absen->update($dataToUpdate);
+        foreach ($request->hari as $key => $val) {
+            $dataToUpdate['hari'.$key] = $val; 
+            switch ($val) {
+                case 1:
+                    $total_shift_1++;
+                    break;
+                case 2:
+                    $total_shift_2++;
+                    break;
+                case 'ls':
+                    $total_shift_ls++;
+                    break;
             }
-            // $dataToUpdate['hari'.$]
-
-            return response()->json(['message' => 'Data absen berhasil diperbarui.']);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
+
+        $absen->update($dataToUpdate);
+        $total_shift_1_jt = $total_shift_1 * 7;
+        $total_shift_2_jt = $total_shift_2 * 7;
+        $total_shift_ls = $total_shift_ls * 8;
+        $total_jt = $total_shift_1_jt + $total_shift_2_jt+$total_shift_ls;
+
+        return response()->json([
+            'message' => 'Data absen berhasil diperbarui.',
+            'total_shift_1' => $total_shift_1,
+            'total_shift_2' => $total_shift_2,
+            'total_shift_ls' => $total_shift_ls,
+            'total_shift_1_jt' => $total_shift_1_jt,
+            'total_shift_2_jt' => $total_shift_2_jt,
+            'total_shift_ls' => $total_shift_ls,
+            'total_jt' => $total_jt,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
     }
+}
+
     public function destroy(Absen $absen)
     {
         $absen->delete();
