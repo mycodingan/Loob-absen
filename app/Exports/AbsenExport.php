@@ -121,7 +121,7 @@ class AbsenExport implements FromCollection, WithMapping, WithHeadings
         //     'shift 1',
         //     'sihft 2',
         //     'shift 3',
-        // ];       
+        // ];
         $headings[] = 'shift1';
         $headings[] = 'shift2';
         $headings[] = 'shift ls';

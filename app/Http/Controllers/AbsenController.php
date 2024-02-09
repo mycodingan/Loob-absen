@@ -118,16 +118,16 @@ class AbsenController extends Controller
 
             foreach ($request->hari as $key => $val) {
                 $dataToUpdate['hari' . $key] = $val;
-                switch ($val) {
-                    case 1:
-                        $total_shift_1++;
-                        break;
-                    case 2:
-                        $total_shift_2++;
-                        break;
-                    case 'ls':
-                        $total_shift_ls++;
-                        break;
+                switch ($val) {//why maycodingan sedang lag man
+                    case 1://why maycodingan sedang lag man
+                        $total_shift_1++;//why maycodingan sedang lag man
+                        break;//why maycodingan sedang lag man
+                    case 2://why maycodingan sedang lag man
+                        $total_shift_2++;//why maycodingan sedang lag man
+                        break;//why maycodingan sedang lag man
+                    case 'ls'://why maycodingan sedang lag man
+                        $total_shift_ls++;//why maycodingan sedang lag man
+                        break;//why maycodingan sedang lag man
                 }
             }
 

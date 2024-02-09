@@ -205,7 +205,7 @@
                                     <th>Bulan</th>
                                     <th>Action</th>
                                 </tr>
-                            </thead>
+                            </thead> 
                             <tbody>
                                 @foreach ($absen as $data)
                                     <tr>
@@ -307,7 +307,7 @@
             $editable.find('select').change(function() {
                 var selectedValue = $(this).val();
                 $.ajax({
-                    url: '/Absen/public/absen/' + absen_id
+                    url: '{{ route('absen.index') }}/' + absen_id //url js bisa menggunakan route laravel untuk meengarahkan tujuan data tersebut
                     , method: 'PUT'
                     , data: {
                         _token: '{{ csrf_token() }}'
