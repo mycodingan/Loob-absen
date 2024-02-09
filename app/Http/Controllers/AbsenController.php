@@ -14,7 +14,7 @@ class AbsenController extends Controller
 {
     public function index(Request $request)
     {
-        // dd($request);
+            // dd($request);
         $searchBranch = $request->input('search_branch');
         $query = Absen::query();
         if (!empty($searchBranch)) {

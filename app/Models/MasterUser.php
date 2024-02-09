@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class MasterUser extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+      'nama_karyawan',
+      'nama_cabang',
+    ];
 }
