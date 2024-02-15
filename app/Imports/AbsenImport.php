@@ -22,12 +22,12 @@ class AbsenImport implements ToModel, WithHeadingRow
         $row['Nama_Karyawan'] = $row['nama_karyawan'];
         $row['tahun'] = $currentDate->year;
         $row['Bulan'] = $currentDate->month;
-        Absen::create($row);
+        Absen::create($row);    
             // dd($row);
             // try {
                 // $currentDate = Carbon::now();
-                // $timestamp = $currentDate->timestamp; 
-            
+                // $timestamp = $currentDate->timestamp;
+
                 // return new Absen([
                 //     'No_absen'      => 'AUTO_' . $timestamp,
                 //     'Nama_Karyawan' => $row['nama_karyawan'] ?? null,
@@ -35,11 +35,11 @@ class AbsenImport implements ToModel, WithHeadingRow
                 //     'posisi_jabatan'=> $row['posisi_jabatan'] ?? null,
                 //     'tahun'         => $currentDate->year,
                 //     'Bulan'         => $currentDate->month,
-                // ]);           
+                // ]);
             // } catch (Throwable $j) {
-            //     Absen::create($row);        
+            //     Absen::create($row);
             // }
-    
+
     }
 }
 
