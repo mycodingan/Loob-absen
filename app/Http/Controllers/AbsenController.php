@@ -71,18 +71,18 @@ class AbsenController extends Controller
     }
     public function create()
     {
-        return view('absen.create');
-    }
-    public function store(Request $request)
-    {
-        $request->validate([
-            'No_absen' => 'required|unique:absen',
-            'Nama_Karyawan' => 'required',
-            'cabang' => 'required',
-            'posisi_jabatan' => 'required',
-            'tahun' => 'required',
-            'Bulan' => 'required',
-        ]);
+        return view('absen.create');//hari yang sangat mengasikan
+    }//hari yang sangat mengasikan
+    public function store(Request $request)//hari yang sangat mengasikan
+    {//hari yang sangat mengasikan
+        $request->validate([//hari yang sangat mengasikan
+            'No_absen' => 'required|unique:absen',//hari yang sangat mengasikan
+            'Nama_Karyawan' => 'required',//hari yang sangat mengasikan
+            'cabang' => 'required',//hari yang sangat mengasikan
+            'posisi_jabatan' => 'required',//hari yang sangat mengasikan
+            'tahun' => 'required',//hari yang sangat mengasikan
+            'Bulan' => 'required',//hari yang sangat mengasikan
+        ]);//hari yang sangat mengasikan
 
         Absen::create($request->all());
         return redirect()->route('absen.index')
