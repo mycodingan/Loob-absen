@@ -16,7 +16,7 @@ class CreateAbsenTable extends Migration
     {
         Schema::create('absen', function (Blueprint $table) {
             $table->id();
-            $table->integer('No_absen')->unique();
+            $table->integer('No_absen');
             $table->string('Nama_Karyawan');
             $table->string('cabang');
             $table->string('posisi_jabatan');
@@ -32,8 +32,8 @@ class CreateAbsenTable extends Migration
     /**
      * Reverse the migrations.
      *
-     * @return void 
-     */ 
+     * @return void
+     */
     public function down()
     {
         Schema::dropIfExists('absen');

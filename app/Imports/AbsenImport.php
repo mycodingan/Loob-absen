@@ -16,31 +16,29 @@ class AbsenImport implements ToModel, WithHeadingRow
     use Importable;
     public function model(array $row)
     {
-        //ini menggunakan array asosiatif
         $currentDate = Carbon::now();
         $row['No_absen'] = $row['no_absen'];
         $row['Nama_Karyawan'] = $row['nama_karyawan'];
         $row['tahun'] = $currentDate->year;
         $row['Bulan'] = $currentDate->month;
-        Absen::create($row);    
-            // dd($row);
-            // try {
-                // $currentDate = Carbon::now();
-                // $timestamp = $currentDate->timestamp;
+        $existingRecord = Absen::where('No_absen', $row['No_absen'])->first();
 
-                // return new Absen([
-                //     'No_absen'      => 'AUTO_' . $timestamp,
-                //     'Nama_Karyawan' => $row['nama_karyawan'] ?? null,
-                //     'cabang'        => $row['cabang'] ?? null,
-                //     'posisi_jabatan'=> $row['posisi_jabatan'] ?? null,
-                //     'tahun'         => $currentDate->year,
-                //     'Bulan'         => $currentDate->month,
-                // ]);
-            // } catch (Throwable $j) {
-            //     Absen::create($row);
-            // }
+        if ($existingRecord) {
+            $changesDetected = false;
+            foreach ($row as $key => $value) {
+                if ($existingRecord->$key != $value) {
+                    $changesDetected = true;
+                    break;
+                }
+            }
 
+            if ($changesDetected) {
+                $existingRecord->update($row);
+            }
+        } else {
+            Absen::create($row);
+        }
     }
-}
+    }
 
 
