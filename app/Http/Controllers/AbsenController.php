@@ -22,6 +22,7 @@ class AbsenController extends Controller
         }
         $daysInMonth = Carbon::now()->daysInMonth;
         // $absen = Absen::all();
+        $absen = $query->paginate(10);
         $absen = $query->get();
         $cabangOptions = Absen::pluck('cabang')->unique();
         $branches = DB::table('absen')->select('cabang')->distinct()->pluck('cabang');
@@ -101,12 +102,15 @@ class AbsenController extends Controller
         $daysInMonth = Carbon::now()->daysInMonth;
         $absen = Absen::all();
 
-        return view('absen.Index', compact('absen', 'daysInMonth'));    
+        return view('absen.Index', compact('absen', 'daysInMonth'));
     }
 
     public function update(Request $request, Absen $absen)
     {
         $request->validate([
+            'Nama_Karyawan' => 'required|array  ',
+            'cabang' => 'required',
+            'posisi_jabatan' => 'required',
             'hari' => 'required|array',
         ]);
 
