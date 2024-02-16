@@ -16,7 +16,7 @@ class CreateAbsenTable extends Migration
     {
         Schema::create('absen', function (Blueprint $table) {
             $table->id();
-            $table->integer('No_absen');
+            $table->integer('No_absen')->unique();
             $table->string('Nama_Karyawan');
             $table->string('cabang');
             $table->string('posisi_jabatan');

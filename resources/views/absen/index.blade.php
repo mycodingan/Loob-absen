@@ -208,49 +208,50 @@
                             </thead>
                             <tbody>
                                 @foreach ($absen as $data)
-                                    <tr>
-                                        <td>{{ $data->No_absen }}</td>
-                                        <td>{{ $data->Nama_Karyawan }}</td>
-                                        <td>{{ $data->cabang }}</td>
-                                        <td>{{ $data->posisi_jabatan }}</td>
-                                        @php
-                                            $total_shift_1 = null;
-                                            $total_shift_2 = null;
-                                            $total_shift_ls = null;
-                                        @endphp
-                                        @for ($i = 1; $i <= $daysInMonth; $i++)
-                                            <td class="editable" data-absen-id="{{ $data->id }}" data-day="{{ $i }}">
-                                                @php
-                                                    if ($data->{'hari' . $i} == 1) {
-                                                        $total_shift_1++;
-                                                    }
-                                                    if ($data->{'hari' . $i} == 2) {
-                                                        $total_shift_2++;
-                                                    }
-                                                    if ($data->{'hari' . $i} == 'ls') {
-                                                        $total_shift_ls++;
-                                                    }
-                                                @endphp
-                                                <span>{{ $data->{'hari' . $i} }}</span>
-                                            </td>
-                                        @endfor
-                                        <td>{{ $total_shift_1 }}</td>
-                                        <td>{{ $total_shift_2 }}</td>
-                                        <td>{{ $total_shift_ls }}</td>
-                                        <td id="total_shift_1_jt">{{ $total_shift_1 * 7 }}</td>
-                                        <td id="total_shift_2_jt">{{ $total_shift_2 * 7 }}</td>
-                                        <td id=" total_shift_ls">{{ $total_shift_ls * 8 }}</td>
-                                        <td id="total_jt">{{ ($total_shift_1 * 7) + ($total_shift_2 * 7) + ($total_shift_ls * 8) }}</td>
-                                        <td>{{ $data->tahun }}</td>
-                                        <td>{{ $data->Bulan }}</td>
-                                        <td>
-                                            <form action="{{ route('absen.destroy', $data->id) }}" method="POST" style="display: inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
-                                            </form>
+                                <tr>
+                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->No_absen }}</td>
+                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->Nama_Karyawan }}</td>
+                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->cabang }}</td>
+                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->posisi_jabatan }}</td>
+                                    @php
+                                        $total_shift_1 = null;
+                                        $total_shift_2 = null;
+                                        $total_shift_ls = null;
+                                    @endphp
+                                    @for ($i = 1; $i <= $daysInMonth; $i++)
+                                        <td class="editable" data-absen-id="{{ $data->id }}" data-day="{{ $i }}">
+                                            @php
+                                                if ($data->{'hari' . $i} == 1) {
+                                                    $total_shift_1++;
+                                                }
+                                                if ($data->{'hari' . $i} == 2) {
+                                                    $total_shift_2++;
+                                                }
+                                                if ($data->{'hari' . $i} == 'ls') {
+                                                    $total_shift_ls++;
+                                                }
+                                            @endphp
+                                            <span>{{ $data->{'hari' . $i} }}</span>
                                         </td>
-                                    </tr>
+                                    @endfor
+                                    <td>{{ $total_shift_1 }}</td>
+                                    <td>{{ $total_shift_2 }}</td>
+                                    <td>{{ $total_shift_ls }}</td>
+                                    <td id="total_shift_1_jt">{{ $total_shift_1 * 7 }}</td>
+                                    <td id="total_shift_2_jt">{{ $total_shift_2 * 7 }}</td>
+                                    <td id=" total_shift_ls">{{ $total_shift_ls * 8 }}</td>
+                                    <td id="total_jt">{{ ($total_shift_1 * 7) + ($total_shift_2 * 7) + ($total_shift_ls * 8) }}</td>
+                                    <td>{{ $data->tahun }}</td>
+                                    <td>{{ $data->Bulan }}</td>
+                                    <td>
+                                        <form action="{{ route('absen.destroy', $data->id) }}" method="POST" style="display: inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+
                                 @endforeach
                                 <tr class="add-row">
                                     <form method="POST" action="{{ route('absen.store') }}">
@@ -303,6 +304,7 @@
 
             $editable.empty().append(selectOptions);
             $editable.find('select').val(currentValue);
+            $editable.find('select').val(currentValue);
 
             $editable.find('select').change(function() {
                 var selectedValue = $(this).val();
@@ -324,8 +326,42 @@
                         console.log(xhr.responseText);
                     }
                 });
-
             });
+
+        });
+        $('.editable_input').click(function() {
+            var $editable = $(this);
+            var absen_id = $editable.data('absen-id');
+            var day = $editable.data('day');
+            var currentValue = $editable.find('span').text();
+
+            var imput = '<select class="form-control">';
+            $editable.empty().append(imput);
+            $editable.find('imput').val(currentValue);
+            $editable.find('imput').val(currentValue);
+
+            $editable.find('select').change(function() {
+                var selectedValue = $(this).val();
+                $.ajax({
+                    url: '{{ route('absen.index') }}/' + absen_id //url js bisa menggunakan route laravel untuk meengarahkan tujuan data tersebut
+                    , method: 'PUT'
+                    , data: {
+                        _token: '{{ csrf_token() }}'
+                        , _method: 'PUT'
+                        , hari: {
+                            [day]: selectedValue
+                        }
+                        , day: day
+                    }
+                    , success: function(response) {
+                        $editable.empty().append('<span>' + selectedValue + '</span>');
+                    }
+                    , error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+
         });
     });
     document.addEventListener('DOMContentLoaded', function() {
