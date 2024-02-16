@@ -139,7 +139,8 @@
                                     <option value="{{ $branch }}" @if($branch==$searchBranch) selected @endif>{{ $branch }}</option>
                                     @endforeach
                                 </select>
-                            </div>                        </form>
+                            </div>
+                        </form>
                         <button type="button" class="btn btn-primary" id="importBtn">Import Data</button>
                         <a href="{{ route('absen.export') }}" class="btn btn-primary">export </a>
                     </div>
@@ -191,19 +192,18 @@
                                     <th>Nama Karyawan</th>
                                     <th>Cabang</th>
                                     <th>Posisi Jabatan</th>
-                                    @for ($i = 1; $i <= $daysInMonth; $i++)
-                                        <th>Hari {{ $i }}</th>
-                                    @endfor
-                                    <th>Shift 1</th>
-                                    <th>Shift 2</th>
-                                    <th>Shift ls</th>
-                                    <th> 1 (jm)</th>
-                                    <th> 2 (jm)</th>
-                                    <th> ls (jm)</th>
-                                    <th>Total (JT)</th>
-                                    <th>Tahun</th>
-                                    <th>Bulan</th>
-                                    <th>Action</th>
+                                    @for ($i = 1; $i <= $daysInMonth; $i++) <th>Hari {{ $i }}</th>
+                                        @endfor
+                                        <th>Shift 1</th>
+                                        <th>Shift 2</th>
+                                        <th>Shift ls</th>
+                                        <th> 1 (jm)</th>
+                                        <th> 2 (jm)</th>
+                                        <th> ls (jm)</th>
+                                        <th>Total (JT)</th>
+                                        <th>Tahun</th>
+                                        <th>Bulan</th>
+                                        <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -214,42 +214,41 @@
                                     <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->cabang }}</td>
                                     <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->posisi_jabatan }}</td>
                                     @php
-                                        $total_shift_1 = null;
-                                        $total_shift_2 = null;
-                                        $total_shift_ls = null;
+                                    $total_shift_1 = null;
+                                    $total_shift_2 = null;
+                                    $total_shift_ls = null;
                                     @endphp
-                                    @for ($i = 1; $i <= $daysInMonth; $i++)
-                                        <td class="editable" data-absen-id="{{ $data->id }}" data-day="{{ $i }}">
-                                            @php
-                                                if ($data->{'hari' . $i} == 1) {
-                                                    $total_shift_1++;
-                                                }
-                                                if ($data->{'hari' . $i} == 2) {
-                                                    $total_shift_2++;
-                                                }
-                                                if ($data->{'hari' . $i} == 'ls') {
-                                                    $total_shift_ls++;
-                                                }
-                                            @endphp
-                                            <span>{{ $data->{'hari' . $i} }}</span>
+                                    @for ($i = 1; $i <= $daysInMonth; $i++) <td class="editable" data-absen-id="{{ $data->id }}" data-day="{{ $i }}">
+                                        @php
+                                        if ($data->{'hari' . $i} == 1) {
+                                        $total_shift_1++;
+                                        }
+                                        if ($data->{'hari' . $i} == 2) {
+                                        $total_shift_2++;
+                                        }
+                                        if ($data->{'hari' . $i} == 'ls') {
+                                        $total_shift_ls++;
+                                        }
+                                        @endphp
+                                        <span>{{ $data->{'hari' . $i} }}</span>
                                         </td>
-                                    @endfor
-                                    <td>{{ $total_shift_1 }}</td>
-                                    <td>{{ $total_shift_2 }}</td>
-                                    <td>{{ $total_shift_ls }}</td>
-                                    <td id="total_shift_1_jt">{{ $total_shift_1 * 7 }}</td>
-                                    <td id="total_shift_2_jt">{{ $total_shift_2 * 7 }}</td>
-                                    <td id=" total_shift_ls">{{ $total_shift_ls * 8 }}</td>
-                                    <td id="total_jt">{{ ($total_shift_1 * 7) + ($total_shift_2 * 7) + ($total_shift_ls * 8) }}</td>
-                                    <td>{{ $data->tahun }}</td>
-                                    <td>{{ $data->Bulan }}</td>
-                                    <td>
-                                        <form action="{{ route('absen.destroy', $data->id) }}" method="POST" style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
-                                        </form>
-                                    </td>
+                                        @endfor
+                                        <td>{{ $total_shift_1 }}</td>
+                                        <td>{{ $total_shift_2 }}</td>
+                                        <td>{{ $total_shift_ls }}</td>
+                                        <td id="total_shift_1_jt">{{ $total_shift_1 * 7 }}</td>
+                                        <td id="total_shift_2_jt">{{ $total_shift_2 * 7 }}</td>
+                                        <td id=" total_shift_ls">{{ $total_shift_ls * 8 }}</td>
+                                        <td id="total_jt">{{ ($total_shift_1 * 7) + ($total_shift_2 * 7) + ($total_shift_ls * 8) }}</td>
+                                        <td>{{ $data->tahun }}</td>
+                                        <td>{{ $data->Bulan }}</td>
+                                        <td>
+                                            <form action="{{ route('absen.destroy', $data->id) }}" method="POST" style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
+                                            </form>
+                                        </td>
                                 </tr>
 
                                 @endforeach
@@ -260,12 +259,11 @@
                                         <td><input type="text" class="form-control" name="Nama_Karyawan" required></td>
                                         <td><input type="text" class="form-control" name="cabang" required></td>
                                         <td><input type="text" class="form-control" name="posisi_jabatan" required></td>
-                                        @for ($i = 1; $i <= $daysInMonth; $i++)
-                                            <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
-                                        @endfor
-                                        <td><input type="text" name="tahun" value="{{ \Carbon\Carbon::now()->year }}"></td>
-                                        <td><input type="tex" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
-                                        <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
+                                        @for ($i = 1; $i <= $daysInMonth; $i++) <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
+                                            @endfor
+                                            <td><input type="text" name="tahun" value="{{ \Carbon\Carbon::now()->year }}"></td>
+                                            <td><input type="tex" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
+                                            <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
                                     </form>
                                 </tr>
                             </tbody>
@@ -282,10 +280,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-        //     document.getElementById('searchQuery').addEventListener('change', function() {
-        //     document.getElementById('searchForm').submit();
-        // });
-        function submitForm() {
+    function submitForm() {
         document.getElementById("searchForm").submit();
     }
     $(document).ready(function() {
@@ -327,42 +322,50 @@
                     }
                 });
             });
-
         });
-        $('.editable_input').click(function() {
-            var $editable = $(this);
-            var absen_id = $editable.data('absen-id');
-            var day = $editable.data('day');
-            var currentValue = $editable.find('span').text();
+        // imput
+        $(document).ready(function() {
+            $('.editable_input').click(function() {
+                var $editable = $(this);
+                var absen_id = $editable.data('absen-id');
+                var day = $editable.data('day');
+                var currentValue = $editable.find('span').text();
 
-            var imput = '<select class="form-control">';
-            $editable.empty().append(imput);
-            $editable.find('imput').val(currentValue);
-            $editable.find('imput').val(currentValue);
+                var input = '<input type="text" class="form-control" >';
+                $editable.empty().append(input);
+                $editable.find('input').val(currentValue).focus();
 
-            $editable.find('select').change(function() {
-                var selectedValue = $(this).val();
-                $.ajax({
-                    url: '{{ route('absen.index') }}/' + absen_id //url js bisa menggunakan route laravel untuk meengarahkan tujuan data tersebut
-                    , method: 'PUT'
-                    , data: {
-                        _token: '{{ csrf_token() }}'
-                        , _method: 'PUT'
-                        , hari: {
-                            [day]: selectedValue
-                        }
-                        , day: day
-                    }
-                    , success: function(response) {
-                        $editable.empty().append('<span>' + selectedValue + '</span>');
-                    }
-                    , error: function(xhr) {
-                        console.log(xhr.responseText);
+                $editable.find('input').keypress(function(event) {
+                    if (event.which === 13) {
+                        var selectedValue = $(this).val();
+                        updateData(absen_id, day, selectedValue, $editable);
                     }
                 });
             });
-
         });
+
+        function updateData(absen_id, day, selectedValue, $editable) {
+            $.ajax({
+                url: '{{route('absen.index')}}/' + absen_id
+                , method: 'PUT'
+                , data: {
+                    _token: '{{ csrf_token() }}'
+                    , _method: 'PUT'
+                    , hari: {
+                        [day]: selectedValue
+                    }
+                    , day: day
+                }
+                , success: function(response) {
+                    $editable.empty().append('<span>' + selectedValue + '</span>');
+                }
+                , error: function(xhr) {
+                    console.log(xhr.responseText);
+                    alert('Error: hayolo data gk ke update.');
+                }
+            });
+        }
+
     });
     document.addEventListener('DOMContentLoaded', function() {
         var importBtn = document.getElementById('importBtn');
@@ -387,28 +390,27 @@
                 importModal.style.display = 'none';
             }
         });
-    });
-    document.getElementById('searchQuery').addEventListener('change', function() {
-        var query = this.value;
-        if (query.trim() !== '') {
-            var formData = new FormData();
-            formData.append('query', query);
-            fetch('{{ route("absen.search") }}', {
-                method: 'GET',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                document.open();
-                document.write(data);
-                document.close();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    });
-
+    }); //hayolo mau curi code saya ya tidak semudah itu pergusu
+    document.getElementById('searchQuery').addEventListener('change', function() { //hayolo mau curi code saya ya tidak semudah itu pergusu
+        var query = this.value; //hayolo mau curi code saya ya tidak semudah itu pergusu
+        if (query.trim() !== '') { //hayolo mau curi code saya ya tidak semudah itu pergusu
+            var formData = new FormData(); //hayolo mau curi code saya ya tidak semudah itu pergusu
+            formData.append('query', query); //hayolo mau curi code saya ya tidak semudah itu pergusu
+            fetch('{{ route("absen.search") }}', { //hayolo mau curi code saya ya tidak semudah itu pergusu
+                    method: 'GET', //hayolo mau curi code saya ya tidak semudah itu pergusu
+                    body: formData //hayolo mau curi code saya ya tidak semudah itu pergusu
+                }) //hayolo mau curi code saya ya tidak semudah itu pergusu
+                .then(response => response.text()) //hayolo mau curi code saya ya tidak semudah itu pergusu
+                .then(data => { //hayolo mau curi code saya ya tidak semudah itu pergusu
+                    document.open(); //hayolo mau curi code saya ya tidak semudah itu pergusu
+                    document.write(data); //hayolo mau curi code saya ya tidak semudah itu pergusu
+                    document.close(); //hayolo mau curi code saya ya tidak semudah itu pergusu
+                }) //hayolo mau curi code saya ya tidak semudah itu pergusu
+                .catch(error => { //hayolo mau curi code saya ya tidak semudah itu pergusu
+                    console.error('Error:', error); //hayolo mau curi code saya ya tidak semudah itu pergusu
+                }); //hayolo mau curi code saya ya tidak semudah itu pergusu
+        } //hayolo mau curi code saya ya tidak semudah itu pergusu
+    }); //hayolo mau curi code saya ya tidak semudah itu pergusu
 
 </script>
 
