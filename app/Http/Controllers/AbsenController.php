@@ -73,18 +73,18 @@ class AbsenController extends Controller
     }
     public function create()
     {
-        return view('absen.create');//hari yang sangat mengasikan
-    }//hari yang sangat mengasikan
-    public function store(Request $request)//hari yang sangat mengasikan
-    {//hari yang sangat mengasikan
-        $request->validate([//hari yang sangat mengasikan
-            'No_absen' => 'required|unique:absen',//hari yang sangat mengasikan
-            'Nama_Karyawan' => 'required',//hari yang sangat mengasikan
-            'cabang' => 'required',//hari yang sangat mengasikan
-            'posisi_jabatan' => 'required',//hari yang sangat mengasikan
-            'tahun' => 'required',//hari yang sangat mengasikan
-            'Bulan' => 'required',//hari yang sangat mengasikan
-        ]);//hari yang sangat mengasikan
+        return view('absen.create');
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'No_absen' => 'required|unique:absen',
+            'Nama_Karyawan' => 'required',
+            'cabang' => 'required',
+            'posisi_jabatan' => 'required',
+            'tahun' => 'required',
+            'Bulan' => 'required',
+        ]);
 
         Absen::create($request->all());
         return redirect()->route('absen.index')
@@ -123,16 +123,16 @@ class AbsenController extends Controller
 
             foreach ($request->hari as $key => $val) {
                 $dataToUpdate['hari' . $key] = $val;
-                switch ($val) {//why maycodingan sedang lag man
-                    case 1://why maycodingan sedang lag man
-                        $total_shift_1++;//why maycodingan sedang lag man
-                        break;//why maycodingan sedang lag man
-                    case 2://why maycodingan sedang lag man
-                        $total_shift_2++;//why maycodingan sedang lag man
-                        break;//why maycodingan sedang lag man
-                    case 'ls'://why maycodingan sedang lag man
-                        $total_shift_ls++;//why maycodingan sedang lag man
-                        break;//why maycodingan sedang lag man
+                switch ($val) {
+                    case 1:
+                        $total_shift_1++;
+                        break;
+                    case 2:
+                        $total_shift_2++;
+                        break;
+                    case 'ls':
+                        $total_shift_ls++;
+                        break;
                 }
             }
 

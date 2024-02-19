@@ -305,7 +305,7 @@
             $editable.find('select').change(function() {
                 var selectedValue = $(this).val();
                 $.ajax({
-                    url: '{{ route('absen.index') }}/' + absen_id //url js bisa menggunakan route laravel untuk meengarahkan tujuan data tersebut
+                    url: '{{ route('absen.index') }}/' + absen_id
                     , method: 'PUT'
                     , data: {
                         _token: '{{ csrf_token() }}'
@@ -348,29 +348,27 @@
                 importModal.style.display = 'none';
             }
         });
-    }); //hayolo mau curi code saya ya tidak semudah itu pergusu
-    document.getElementById('searchQuery').addEventListener('change', function() { //hayolo mau curi code saya ya tidak semudah itu pergusu
-        var query = this.value; //hayolo mau curi code saya ya tidak semudah itu pergusu
-        if (query.trim() !== '') { //hayolo mau curi code saya ya tidak semudah itu pergusu
-            var formData = new FormData(); //hayolo mau curi code saya ya tidak semudah itu pergusu
-            formData.append('query', query); //hayolo mau curi code saya ya tidak semudah itu pergusu
-            fetch('{{ route("absen.search") }}', { //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    method: 'GET', //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    body: formData //hayolo mau curi code saya ya tidak semudah itu pergusu
-                }) //hayolo mau curi code saya ya tidak semudah itu pergusu
-                .then(response => response.text()) //hayolo mau curi code saya ya tidak semudah itu pergusu
-                .then(data => { //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    document.open(); //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    document.write(data); //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    document.close(); //hayolo mau curi code saya ya tidak semudah itu pergusu
-                }) //hayolo mau curi code saya ya tidak semudah itu pergusu
-                .catch(error => { //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    console.error('Error:', error); //hayolo mau curi code saya ya tidak semudah itu pergusu
-                }); //hayolo mau curi code saya ya tidak semudah itu pergusu
-        } //hayolo mau curi code saya ya tidak semudah itu pergusu
-    }); //hayolo mau curi code saya ya tidak semudah itu pergusu
-
-</script>
+    });
+    document.getElementById('searchQuery').addEventListener('change', function() {
+        var query = this.value;
+        if (query.trim() !== '') {
+            var formData = new FormData();
+            formData.append('query', query);
+            fetch('{{ route("absen.search") }}', {
+                    method: 'GET',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.open();
+                    document.write(data);
+                    document.close();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    });
 
 @endsection
 {{-- contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}"
