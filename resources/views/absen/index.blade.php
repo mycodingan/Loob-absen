@@ -313,7 +313,7 @@
             updateData(absen_id, day, selectedValue, $editable);
         });
 
-        if (inputType === 'input') {//buat agar saat enter tinggal langsung click
+        if (inputType === 'input') {//buat agar saat enter tinggal langsung click   
             element.on('keypress', function(event) {
                 if (event.which === 13) {
                     var selectedValue = $(this).val();
