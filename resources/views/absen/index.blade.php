@@ -209,10 +209,10 @@
                             <tbody>
                                 @foreach ($absen as $data)
                                 <tr>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->No_absen }}</td>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->Nama_Karyawan }}</td>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->cabang }}</td>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->posisi_jabatan }}</td>
+                                    <td>{{ $data->No_absen }}</td>
+                                    <td>{{ $data->Nama_Karyawan }}</td>
+                                    <td>{{ $data->cabang }}</td>
+                                    <td>{{ $data->posisi_jabatan }}</td>
                                     @php
                                     $total_shift_1 = null;
                                     $total_shift_2 = null;
@@ -272,6 +272,7 @@
                 </div>
             </div>
         </div>
+        {{ $absen->links() }}
     </div>
 </div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -323,50 +324,7 @@
                 });
             });
         });
-        // imput
-        $(document).ready(function() {
-            $('.editable_input').click(function() {
-                var $editable = $(this);
-                var absen_id = $editable.data('absen-id');
-                var day = $editable.data('day');
-                var currentValue = $editable.find('span').text();
-
-                var input = '<input type="text" class="form-control" >';
-                $editable.empty().append(input);
-                $editable.find('input').val(currentValue).focus();
-
-                $editable.find('input').keypress(function(event) {
-                    if (event.which === 13) {
-                        var selectedValue = $(this).val();
-                        updateData(absen_id, day, selectedValue, $editable);
-                    }
-                });
-            });
         });
-
-        function updateData(absen_id, day, selectedValue, $editable) {
-            $.ajax({
-                url: '{{route('absen.index')}}/' + absen_id
-                , method: 'PUT'
-                , data: {
-                    _token: '{{ csrf_token() }}'
-                    , _method: 'PUT'
-                    , hari: {
-                        [day]: selectedValue
-                    }
-                    , day: day
-                }
-                , success: function(response) {
-                    $editable.empty().append('<span>' + selectedValue + '</span>');
-                }
-                , error: function(xhr) {
-                    console.log(xhr.responseText);
-                    alert('Error: hayolo data gk ke update.');
-                }
-            });
-        }
-
-    });
     document.addEventListener('DOMContentLoaded', function() {
         var importBtn = document.getElementById('importBtn');
         var importModal = document.getElementById('importModal');
@@ -415,3 +373,7 @@
 </script>
 
 @endsection
+{{-- contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}"
+contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}"
+contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}"
+contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}" --}}
