@@ -313,6 +313,15 @@
                         , hari: {
                             [day]: selectedValue
                         }
+                        , Nama_Karyawan: {
+                            [day]: selectedValue
+                        }
+                        , cabang: {
+                            [day]: selectedValue
+                        }
+                        , posisi_jabatan: {
+                            [day]: selectedValue
+                        }
                         , day: day
                     }
                     , success: function(response) {
@@ -353,6 +362,15 @@
                     _token: '{{ csrf_token() }}'
                     , _method: 'PUT'
                     , hari: {
+                        [day]: selectedValue
+                    }
+                    , Nama_Karyawan: {
+                        [day]: selectedValue
+                    }
+                    , cabang: {
+                        [day]: selectedValue
+                    }
+                    , posisi_jabatan: {
                         [day]: selectedValue
                     }
                     , day: day
