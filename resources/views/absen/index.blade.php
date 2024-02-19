@@ -52,8 +52,6 @@
 
     table {
         width: 100%;
-        /* border-collapse: collapse; */
-        /* border: blue; */
     }
 
     th,
@@ -188,6 +186,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th>penyesuaian</th>
                                     <th>No Absen</th>
                                     <th>Nama Karyawan</th>
                                     <th>Cabang</th>
@@ -209,6 +208,9 @@
                             <tbody>
                                 @foreach ($absen as $data)
                                 <tr>
+                                    <td>
+                                        <p type="button" class="btn btn-warning" onclick="edit_data('{{ $data->id }}','{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">📝</p>
+                                    </td>
                                     <td>{{ $data->No_absen }}</td>
                                     <td>{{ $data->Nama_Karyawan }}</td>
                                     <td>{{ $data->cabang }}</td>
@@ -238,7 +240,7 @@
                                         <td>{{ $total_shift_ls }}</td>
                                         <td id="total_shift_1_jt">{{ $total_shift_1 * 7 }}</td>
                                         <td id="total_shift_2_jt">{{ $total_shift_2 * 7 }}</td>
-                                        <td id=" total_shift_ls">{{ $total_shift_ls * 8 }}</td>
+                                        <td id="total_shift_ls">{{ $total_shift_ls * 8 }}</td>
                                         <td id="total_jt">{{ ($total_shift_1 * 7) + ($total_shift_2 * 7) + ($total_shift_ls * 8) }}</td>
                                         <td>{{ $data->tahun }}</td>
                                         <td>{{ $data->Bulan }}</td>
@@ -262,7 +264,7 @@
                                         @for ($i = 1; $i <= $daysInMonth; $i++) <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
                                             @endfor
                                             <td><input type="text" name="tahun" value="{{ \Carbon\Carbon::now()->year }}"></td>
-                                            <td><input type="tex" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
+                                            <td><input type="text" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
                                             <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
                                     </form>
                                 </tr>
@@ -275,12 +277,94 @@
         {{ $absen->links() }}
     </div>
 </div>
+{{-- Modal untuk edit data --}}
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Data Karyawan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" action="{{ route('absen.update', $data->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="form-group">
+                        <label for="edit_Nama_Karyawan">Nama Karyawan</label>
+                        <input type="text" class="form-control" id="edit_Nama_Karyawan" name="Nama_Karyawan" value="" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_cabang">Cabang</label>
+                        <input type="text" class="form-control" id="edit_cabang" name="cabang" value="" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_posisi_jabatan">Posisi Jabatan</label>
+                        <input type="text" class="form-control" id="edit_posisi_jabatan" name="posisi_jabatan" value="" required>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+    $(document).ready(function(){
+
+});
+$('#editForm').on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function(response){
+                console.log(response);
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    });
+    function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
+        $('#edit_Nama_Karyawan').val(Nama_Karyawan);
+        $('#edit_cabang').val(cabang);
+        $('#edit_posisi_jabatan').val(posisi_jabatan);
+    $('#exampleModal').modal('show')
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        var importBtn = document.getElementById('importBtn');
+        var importModal = document.getElementById('importModal');
+        var closeBtn = document.querySelector('.close');
+
+        importBtn.addEventListener('click', function() {
+            importModal.style.display = 'block';
+        });
+
+        closeBtn.addEventListener('click', function() {
+            importModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == importModal) {
+                importModal.style.display = 'none';
+            }
+        });
+    });
+
+
     function submitForm() {
         document.getElementById("searchForm").submit();
     }
@@ -296,7 +380,6 @@
             selectOptions += '<option value="2">2</option>';
             selectOptions += '<option value="ls">LS</option>';
             selectOptions += '</select>';
-
 
             $editable.empty().append(selectOptions);
             $editable.find('select').val(currentValue);
@@ -324,7 +407,8 @@
                 });
             });
         });
-            });
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         var importBtn = document.getElementById('importBtn');
         var importModal = document.getElementById('importModal');
@@ -355,8 +439,8 @@
             var formData = new FormData();
             formData.append('query', query);
             fetch('{{ route("absen.search") }}', {
-                    method: 'GET',
-                    body: formData
+                    method: 'GET'
+                    , body: formData
                 })
                 .then(response => response.text())
                 .then(data => {
@@ -370,8 +454,6 @@
         }
     });
 
+</script>
+
 @endsection
-{{-- contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}"
-contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}"
-contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}"
-contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}" --}}

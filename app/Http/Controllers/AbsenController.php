@@ -14,7 +14,7 @@ class AbsenController extends Controller
 {
     public function index(Request $request)
     {
-            // dd($request);
+        // dd($request);
         $searchBranch = $request->input('search_branch');
         $query = Absen::query();
         if (!empty($searchBranch)) {
@@ -109,14 +109,15 @@ class AbsenController extends Controller
     public function update(Request $request, Absen $absen)
     {
         $request->validate([
-            // 'Nama_Karyawan' => 'required|array',
-            // 'cabang' => 'required|array',
-            // 'posisi_jabatan' => 'required|array',
-            'hari' => 'required|array',
+            'Nama_Karyawan' => 'nullable',
+            'cabang' => 'nullable',
+            'posisi_jabatan' => 'nullable',
+            'hari' => 'nullable',
         ]);
 
         try {
             $dataToUpdate = [];
+
             $total_shift_1 = 0;
             $total_shift_2 = 0;
             $total_shift_ls = 0;
@@ -135,12 +136,11 @@ class AbsenController extends Controller
                         break;
                 }
             }
-
             $absen->update($dataToUpdate);
             $total_shift_1_jt = $total_shift_1 * 7;
             $total_shift_2_jt = $total_shift_2 * 7;
-            $total_shift_ls = $total_shift_ls * 8;
-            $total_jt = $total_shift_1_jt + $total_shift_2_jt + $total_shift_ls;
+            $total_shift_ls_jt = $total_shift_ls * 8;
+            $total_jt = $total_shift_1_jt + $total_shift_2_jt + $total_shift_ls_jt;
 
             return response()->json([
                 'message' => 'Data absen berhasil diperbarui.',
@@ -149,13 +149,16 @@ class AbsenController extends Controller
                 'total_shift_ls' => $total_shift_ls,
                 'total_shift_1_jt' => $total_shift_1_jt,
                 'total_shift_2_jt' => $total_shift_2_jt,
-                'total_shift_ls' => $total_shift_ls,
+                'total_shift_ls_jt' => $total_shift_ls_jt,
                 'total_jt' => $total_jt,
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
+        // return redirect()->route('absens.index')
+        // ->with('success', 'Absen updated successfully');
     }
+
 
     public function destroy(Absen $absen)
     {
