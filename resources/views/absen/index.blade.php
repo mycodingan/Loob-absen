@@ -209,10 +209,10 @@
                             <tbody>
                                 @foreach ($absen as $data)
                                 <tr>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->No_absen }}</td>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->Nama_Karyawan }}</td>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->cabang }}</td>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->id }}">{{ $data->posisi_jabatan }}</td>
+                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->No_absen }}</td>
+                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->Nama_Karyawan }}</td>
+                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->cabang }}</td>
+                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->posisi_jabatan }}</td>
                                     @php
                                     $total_shift_1 = null;
                                     $total_shift_2 = null;
@@ -272,6 +272,7 @@
                 </div>
             </div>
         </div>
+        {{ $absen->links() }}
     </div>
 </div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">

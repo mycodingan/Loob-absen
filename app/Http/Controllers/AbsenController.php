@@ -105,12 +105,12 @@ class AbsenController extends Controller
         return view('absen.Index', compact('absen', 'daysInMonth'));
     }
 
-    public function update(Request $request, Absen $absen)
+    public function update(Request           $request, Absen $absen)
     {
         $request->validate([
-            'Nama_Karyawan' => 'required|array',
-            'cabang' => 'required|array',
-            'posisi_jabatan' => 'required|array',
+            // 'Nama_Karyawan' => 'required|array',
+            // 'cabang' => 'required|array',
+            // 'posisi_jabatan' => 'required|array',
             'hari' => 'required|array',
         ]);
 
