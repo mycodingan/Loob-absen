@@ -285,107 +285,66 @@
         document.getElementById("searchForm").submit();
     }
     $(document).ready(function() {
-        $('.editable').click(function() {
-            var $editable = $(this);
-            var absen_id = $editable.data('absen-id');
-            var day = $editable.data('day');
-            var currentValue = $editable.find('span').text();
+    $('.editable').click(function() {
+        handleEdit($(this), 'select');
+    });
 
-            var selectOptions = '<select class="form-control">';
-            selectOptions += '<option value="1">1</option>';
-            selectOptions += '<option value="2">2</option>';
-            selectOptions += '<option value="ls">LS</option>';
-            selectOptions += '</select>';
+    $('.editable_input').click(function() {
+        handleEdit($(this), 'input');
+    });
 
+    function handleEdit($editable, inputType) {
+        var absen_id = $editable.data('absen-id');
+        var day = $editable.data('day');
+        var currentValue = $editable.find('span').text();
+        var element;
 
-            $editable.empty().append(selectOptions);
-            $editable.find('select').val(currentValue);
-            $editable.find('select').val(currentValue);
+        if (inputType === 'select') {//di jadikan kondisi yang agak lain
+            element = $('<select class="form-control"><option value="1">1</option><option value="2">2</option><option value="ls">LS</option></select>');
+        } else {
+            element = $('<input type="text" class="form-control">');
+        }
 
-            $editable.find('select').change(function() {
-                var selectedValue = $(this).val();
-                $.ajax({
-                    url: '{{ route('absen.index') }}/' + absen_id //url js bisa menggunakan route laravel untuk meengarahkan tujuan data tersebut
-                    , method: 'PUT'
-                    , data: {
-                        _token: '{{ csrf_token() }}'
-                        , _method: 'PUT'
-                        , hari: {
-                            [day]: selectedValue
-                        }
-                        , Nama_Karyawan: {
-                            [day]: selectedValue
-                        }
-                        , cabang: {
-                            [day]: selectedValue
-                        }
-                        , posisi_jabatan: {
-                            [day]: selectedValue
-                        }
-                        , day: day
-                    }
-                    , success: function(response) {
-                        $editable.empty().append('<span>' + selectedValue + '</span>');
-                    }
-                    , error: function(xhr) {
-                        console.log(xhr.responseText);
-                    }
-                });
-            });
-        });
-        // imput
-        $(document).ready(function() {
-            $('.editable_input').click(function() {
-                var $editable = $(this);
-                var absen_id = $editable.data('absen-id');
-                var day = $editable.data('day');
-                var currentValue = $editable.find('span').text();
+        $editable.empty().append(element);
+        element.val(currentValue).focus();
 
-                var input = '<input type="text" class="form-control" >';
-                $editable.empty().append(input);
-                $editable.find('input').val(currentValue).focus();
-
-                $editable.find('input').keypress(function(event) {
-                    if (event.which === 13) {
-                        var selectedValue = $(this).val();
-                        updateData(absen_id, day, selectedValue, $editable);
-                    }
-                });
-            });
+        element.on('change', function() {
+            var selectedValue = $(this).val();
+            updateData(absen_id, day, selectedValue, $editable);
         });
 
-        function updateData(absen_id, day, selectedValue, $editable) {
-            $.ajax({
-                url: '{{route('absen.index')}}/' + absen_id
-                , method: 'PUT'
-                , data: {
-                    _token: '{{ csrf_token() }}'
-                    , _method: 'PUT'
-                    , hari: {
-                        [day]: selectedValue
-                    }
-                    , Nama_Karyawan: {
-                        [day]: selectedValue
-                    }
-                    , cabang: {
-                        [day]: selectedValue
-                    }
-                    , posisi_jabatan: {
-                        [day]: selectedValue
-                    }
-                    , day: day
-                }
-                , success: function(response) {
-                    $editable.empty().append('<span>' + selectedValue + '</span>');
-                }
-                , error: function(xhr) {
-                    console.log(xhr.responseText);
-                    alert('Error: hayolo data gk ke update.');
+        if (inputType === 'input') {//buat agar saat enter tinggal langsung click
+            element.on('keypress', function(event) {
+                if (event.which === 13) {
+                    var selectedValue = $(this).val();
+                    updateData(absen_id, day, selectedValue, $editable);
                 }
             });
         }
+    }
 
-    });
+    function updateData(absen_id, day, selectedValue, $editable) {
+        $.ajax({
+            url: '{{route('absen.index')}}/' + absen_id,
+            method: 'PUT',
+            data: {
+                _token: '{{ csrf_token() }}',
+                _method: 'PUT',
+                hari: {[day]: selectedValue},
+                Nama_Karyawan: {[day]: selectedValue},
+                cabang: {[day]: selectedValue},
+                posisi_jabatan: {[day]: selectedValue},
+                day: day
+            },
+            success: function(response) {
+                $editable.empty().append('<span>' + selectedValue + '</span>');
+            },
+            error: function(xhr) {
+                alert('Error: Data tidak dapat diperbarui.');
+            }
+        });
+    }
+});
     document.addEventListener('DOMContentLoaded', function() {
         var importBtn = document.getElementById('importBtn');
         var importModal = document.getElementById('importModal');
@@ -434,3 +393,4 @@
 </script>
 
 @endsection
+
