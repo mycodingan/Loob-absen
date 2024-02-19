@@ -324,7 +324,7 @@
                 });
             });
         });
-        });
+            });
     document.addEventListener('DOMContentLoaded', function() {
         var importBtn = document.getElementById('importBtn');
         var importModal = document.getElementById('importModal');
