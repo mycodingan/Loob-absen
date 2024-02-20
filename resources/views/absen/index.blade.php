@@ -321,23 +321,25 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script>
-    $(document).ready(function(){
-
-});
-$('#editForm').on('submit', function(e){
+$(document).ready(function() {
+    $('#editForm').on('submit', function(e) {
         e.preventDefault();
+        var formData = $(this).serialize();
+        var url = $(this).attr('action');
         $.ajax({
             type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function(response){
+            url: url,
+            data: formData,
+            success: function(response) {
                 console.log(response);
             },
-            error: function(error){
+            error: function(error) {
                 console.log(error);
             }
         });
     });
+});
+
     function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
         $('#edit_Nama_Karyawan').val(Nama_Karyawan);
         $('#edit_cabang').val(cabang);
@@ -453,6 +455,8 @@ $('#editForm').on('submit', function(e){
                 });
         }
     });
+
+
 
 </script>
 

@@ -112,30 +112,32 @@ class AbsenController extends Controller
             'Nama_Karyawan' => 'nullable',
             'cabang' => 'nullable',
             'posisi_jabatan' => 'nullable',
-            'hari' => 'nullable',
+            'hari' => 'nullable|array',
         ]);
 
         try {
             $dataToUpdate = [];
-
             $total_shift_1 = 0;
             $total_shift_2 = 0;
             $total_shift_ls = 0;
 
-            foreach ($request->hari as $key => $val) {
-                $dataToUpdate['hari' . $key] = $val;
-                switch ($val) {
-                    case 1:
-                        $total_shift_1++;
-                        break;
-                    case 2:
-                        $total_shift_2++;
-                        break;
-                    case 'ls':
-                        $total_shift_ls++;
-                        break;
+            if (is_array($request->hari)) {
+                foreach ($request->hari as $key => $val) {
+                    $dataToUpdate['hari' . $key] = $val;
+                    switch ($val) {
+                        case 1:
+                            $total_shift_1++;
+                            break;
+                        case 2:
+                            $total_shift_2++;
+                            break;
+                        case 'ls':
+                            $total_shift_ls++;
+                            break;
+                    }
                 }
             }
+
             $absen->update($dataToUpdate);
             $total_shift_1_jt = $total_shift_1 * 7;
             $total_shift_2_jt = $total_shift_2 * 7;
@@ -155,8 +157,6 @@ class AbsenController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
-        // return redirect()->route('absens.index')
-        // ->with('success', 'Absen updated successfully');
     }
 
 
