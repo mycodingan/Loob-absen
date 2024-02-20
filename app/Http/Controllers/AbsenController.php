@@ -28,20 +28,6 @@ class AbsenController extends Controller
 
         return view('absen.index', compact('absen', 'daysInMonth', 'cabangOptions', 'branches', 'searchBranch'));
     }
-    // // public function search(Request $request)
-    // public function gabut(Request $request){
-    //     ## @log $semarang
-    // }
-    // {
-    //     $query = $request->input('query');
-
-    //     $absen = Absen::where('cabang', 'like', '%' . $query . '%')->get();
-    //     $cabangOptions = Absen::pluck('cabang')->unique();
-    //     $daysInMonth = Carbon::now()->daysInMonth;
-
-
-    //     return view('absen.index', compact('absen','cabangOptions','daysInMonth'));
-    // }+
     public function export()
     {
         try {
@@ -108,6 +94,7 @@ class AbsenController extends Controller
 
     public function update(Request $request, Absen $absen)
     {
+// dd($absen);
         $request->validate([
             'Nama_Karyawan' => 'nullable',
             'cabang' => 'nullable',
@@ -121,7 +108,7 @@ class AbsenController extends Controller
             $total_shift_2 = 0;
             $total_shift_ls = 0;
 
-            if (is_array($request->hari)) {
+            if ($request->has('hari')) {
                 foreach ($request->hari as $key => $val) {
                     $dataToUpdate['hari' . $key] = $val;
                     switch ($val) {
@@ -136,8 +123,12 @@ class AbsenController extends Controller
                             break;
                     }
                 }
-            }
+            } else {
 
+                $dataToUpdate['Nama_Karyawan'] = $request->Nama_Karyawan;
+                $dataToUpdate['cabang'] = $request->cabang;
+                $dataToUpdate['posisi_jabatan'] = $request->posisi_jabatan;
+            }
             $absen->update($dataToUpdate);
             $total_shift_1_jt = $total_shift_1 * 7;
             $total_shift_2_jt = $total_shift_2 * 7;
@@ -146,13 +137,6 @@ class AbsenController extends Controller
 
             return response()->json([
                 'message' => 'Data absen berhasil diperbarui.',
-                'total_shift_1' => $total_shift_1,
-                'total_shift_2' => $total_shift_2,
-                'total_shift_ls' => $total_shift_ls,
-                'total_shift_1_jt' => $total_shift_1_jt,
-                'total_shift_2_jt' => $total_shift_2_jt,
-                'total_shift_ls_jt' => $total_shift_ls_jt,
-                'total_jt' => $total_jt,
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);

@@ -209,7 +209,7 @@
                                 @foreach ($absen as $data)
                                 <tr>
                                     <td>
-                                        <p type="button" class="btn btn-warning" onclick="edit_data('{{ $data->id }}','{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">📝</p>
+                                        <p type="button" class="btn btn-warning" onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">📝</p>
                                     </td>
                                     <td>{{ $data->No_absen }}</td>
                                     <td>{{ $data->Nama_Karyawan }}</td>
@@ -292,6 +292,8 @@
                     @csrf
                     @method('PUT')
 
+                        <input type="hidden" class="form-control" id="edit_id_Karyawan" name="ID_Karyawan" value="" required>
+
                     <div class="form-group">
                         <label for="edit_Nama_Karyawan">Nama Karyawan</label>
                         <input type="text" class="form-control" id="edit_Nama_Karyawan" name="Nama_Karyawan" value="" required>
@@ -325,7 +327,9 @@ $(document).ready(function() {
     $('#editForm').on('submit', function(e) {
         e.preventDefault();
         var formData = $(this).serialize();
-        var url = $(this).attr('action');
+        var absen_id = $('#edit_id_Karyawan').val();
+        console.log(formData)
+        var url = '{{ route('absen.index') }}/' + absen_id;
         $.ajax({
             type: 'POST',
             url: url,
@@ -340,12 +344,14 @@ $(document).ready(function() {
     });
 });
 
-    function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
-        $('#edit_Nama_Karyawan').val(Nama_Karyawan);
-        $('#edit_cabang').val(cabang);
-        $('#edit_posisi_jabatan').val(posisi_jabatan);
-    $('#exampleModal').modal('show')
-    }
+function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
+    $('#edit_id').val(id);
+    $('#edit_id_Karyawan').val(id);
+    $('#edit_Nama_Karyawan').val(Nama_Karyawan);
+    $('#edit_cabang').val(cabang);
+    $('#edit_posisi_jabatan').val(posisi_jabatan);
+    $('#exampleModal').modal('show');
+}
     document.addEventListener('DOMContentLoaded', function() {
         var importBtn = document.getElementById('importBtn');
         var importModal = document.getElementById('importModal');
