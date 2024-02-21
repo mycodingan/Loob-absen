@@ -6,14 +6,12 @@ use App\Models\Absen;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\SkipsOnError;
-use Throwable;
 use Carbon\Carbon;
-
 
 class AbsenImport implements ToModel, WithHeadingRow
 {
     use Importable;
+
     public function model(array $row)
     {
         $currentDate = Carbon::now();
@@ -21,8 +19,9 @@ class AbsenImport implements ToModel, WithHeadingRow
         $row['Nama_Karyawan'] = $row['nama_karyawan'];
         $row['tahun'] = $currentDate->year;
         $row['Bulan'] = $currentDate->month;
-        $existingRecord = Absen::where('No_absen', $row['No_absen'])->first();
 
+
+        $existingRecord = Absen::where('No_absen', $row['No_absen'])->first();
         if ($existingRecord) {
             $changesDetected = false;
             foreach ($row as $key => $value) {
@@ -39,6 +38,4 @@ class AbsenImport implements ToModel, WithHeadingRow
             Absen::create($row);
         }
     }
-    }
-
-
+}

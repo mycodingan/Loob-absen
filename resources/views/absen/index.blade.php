@@ -52,8 +52,6 @@
 
     table {
         width: 100%;
-        /* border-collapse: collapse; */
-        /* border: blue; */
     }
 
     th,
@@ -188,6 +186,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    {{-- <th>Edit</th> --}}
                                     <th>No Absen</th>
                                     <th>Nama Karyawan</th>
                                     <th>Cabang</th>
@@ -209,10 +208,20 @@
                             <tbody>
                                 @foreach ($absen as $data)
                                 <tr>
+<<<<<<< HEAD
                                     <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->No_absen }}</td>
                                     <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->Nama_Karyawan }}</td>
                                     <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->cabang }}</td>
                                     <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->posisi_jabatan }}</td>
+=======
+                                    {{-- <td>
+                                        <p type="button" class="btn btn-transparent btn-outline-warning" onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">📝</p>
+                                    </td> --}}
+                                    <td>{{ $data->No_absen }}</td>
+                                    <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">{{ $data->Nama_Karyawan }}</td>
+                                    <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')"{{ $data->Nama_Karyawan }}>{{ $data->cabang }}</td>
+                                    <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')"{{ $data->Nama_Karyawan }}>{{ $data->posisi_jabatan }}</td>
+>>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
                                     @php
                                     $total_shift_1 = null;
                                     $total_shift_2 = null;
@@ -238,7 +247,11 @@
                                         <td>{{ $total_shift_ls }}</td>
                                         <td id="total_shift_1_jt">{{ $total_shift_1 * 7 }}</td>
                                         <td id="total_shift_2_jt">{{ $total_shift_2 * 7 }}</td>
+<<<<<<< HEAD
                                         <td id=" total_shift_ls">{{ $total_shift_ls * 8 }}</td>
+=======
+                                        <td id="total_shift_ls">{{ $total_shift_ls * 8 }}</td>
+>>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
                                         <td id="total_jt">{{ ($total_shift_1 * 7) + ($total_shift_2 * 7) + ($total_shift_ls * 8) }}</td>
                                         <td>{{ $data->tahun }}</td>
                                         <td>{{ $data->Bulan }}</td>
@@ -262,7 +275,11 @@
                                         @for ($i = 1; $i <= $daysInMonth; $i++) <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
                                             @endfor
                                             <td><input type="text" name="tahun" value="{{ \Carbon\Carbon::now()->year }}"></td>
+<<<<<<< HEAD
                                             <td><input type="tex" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
+=======
+                                            <td><input type="text" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
+>>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
                                             <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
                                     </form>
                                 </tr>
@@ -275,16 +292,117 @@
         {{ $absen->links() }}
     </div>
 </div>
+{{-- Modal untuk edit data --}}
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Data Karyawan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                        <input type="hidden" class="form-control" id="edit_id_Karyawan" name="ID_Karyawan" value="" required>
+
+                    <div class="form-group">
+                        <label for="edit_Nama_Karyawan">Nama Karyawan</label>
+                        <input type="text" class="form-control" id="edit_Nama_Karyawan" name="Nama_Karyawan" value="" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_cabang">Cabang</label>
+                        <input type="text" class="form-control" id="edit_cabang" name="cabang" value="" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_posisi_jabatan">Posisi Jabatan</label>
+                        <input type="text" class="form-control" id="edit_posisi_jabatan" name="posisi_jabatan" value="" required>
+                    </div>
+
+                    <div class="modal-footer">
+                        <p style="color: #888"><small>silahkan clik enter untuk mengubah data yang sudah di perbarui mupun belum</small></p>
+                        <button id="hillang" type="submit" class="btn btn-primary">Update Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+<<<<<<< HEAD
+=======
+
+    //untuk melakukan sebuah edit data pada modal  | menggunakan sebuah ajaxa
+$(document).ready(function() {
+    $('#editForm').on('submit', function(e) {
+        e.preventDefault();
+        var formData = $(this).serialize();
+        var absen_id = $('#edit_id_Karyawan').val();
+        var url = '{{ route('absen.index') }}/' + absen_id;
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            success: function(response) {
+                console.log(response);
+                location.reload(true);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+//untuk perintah di bawah ini saya membuat nya untuk menghilan kan button update data
+document.getElementById("hillang").style.display = "none";
+// syntax di bawah init sebuk code ajaxjyang di gunakan untuk  menerima data saat proses update
+function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
+    $('#edit_id').val(id);
+    $('#edit_id_Karyawan').val(id);
+    $('#edit_Nama_Karyawan').val(Nama_Karyawan);
+    $('#edit_cabang').val(cabang);
+    $('#edit_posisi_jabatan').val(posisi_jabatan);
+    $('#exampleModal').modal('show');
+}
+//script dibawah ini saya gunakan untk modal yang terdapat pada import data dari excel
+    document.addEventListener('DOMContentLoaded', function() {
+        var importBtn = document.getElementById('importBtn');
+        var importModal = document.getElementById('importModal');
+        var closeBtn = document.querySelector('.close');
+
+        importBtn.addEventListener('click', function() {
+            importModal.style.display = 'block';
+        });
+
+        closeBtn.addEventListener('click', function() {
+            importModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == importModal) {
+                importModal.style.display = 'none';
+            }
+        });
+    });
+
+
+    //code ini di gunakan untuk  agar saat kita melakukan sebuah searchcing bisa langsung searc tampa harus menggunkan button untuk me refresh
+>>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
     function submitForm() {
         document.getElementById("searchForm").submit();
     }
+    //jika code yang ini saya gunakan untuk membuat sebua pemasukan data pada colom hari ini sebenar nya sebuah edit dengan saya ubah tipedata hari menjadi nulable
     $(document).ready(function() {
+<<<<<<< HEAD
     $('.editable').click(function() {
         handleEdit($(this), 'select');
     });
@@ -389,6 +507,70 @@
                 }); //hayolo mau curi code saya ya tidak semudah itu pergusu
         } //hayolo mau curi code saya ya tidak semudah itu pergusu
     }); //hayolo mau curi code saya ya tidak semudah itu pergusu
+=======
+        $('.editable').click(function() {
+            var $editable = $(this);
+            var absen_id = $editable.data('absen-id');
+            var day = $editable.data('day');
+            var currentValue = $editable.find('span').text();
+
+            var selectOptions = '<select class="form-control">';
+            selectOptions += '<option value="1">1</option>';
+            selectOptions += '<option value="2">2</option>';
+            selectOptions += '<option value="ls">LS</option>';
+            selectOptions += '</select>';
+
+            $editable.empty().append(selectOptions);
+            $editable.find('select').val(currentValue);
+            $editable.find('select').val(currentValue);
+
+            $editable.find('select').change(function() {
+                var selectedValue = $(this).val();
+                $.ajax({
+                    url: '{{ route('absen.index') }}/' + absen_id
+                    , method: 'PUT'
+                    , data: {
+                        _token: '{{ csrf_token() }}'
+                        , _method: 'PUT'
+                        , hari: {
+                            [day]: selectedValue
+                        }
+                        , day: day
+                    }
+                    , success: function(response) {
+                        $editable.empty().append('<span>' + selectedValue + '</span>');
+                    }
+                    , error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        });
+    });
+    //ini systax java script untuk melakuan search data yang sudah ada utnuk mempermudah pencarian pada setiap cabang
+    document.getElementById('searchQuery').addEventListener('change', function() {
+        var query = this.value;
+        if (query.trim() !== '') {
+            var formData = new FormData();
+            formData.append('query', query);
+            fetch('{{ route("absen.search") }}', {
+                    method: 'GET'
+                    , body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.open();
+                    document.write(data);
+                    document.close();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    });
+
+>>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
+
 
 </script>
 

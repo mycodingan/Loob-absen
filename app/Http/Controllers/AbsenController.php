@@ -14,7 +14,7 @@ class AbsenController extends Controller
 {
     public function index(Request $request)
     {
-            // dd($request);
+        // dd($request);
         $searchBranch = $request->input('search_branch');
         $query = Absen::query();
         if (!empty($searchBranch)) {
@@ -28,18 +28,6 @@ class AbsenController extends Controller
 
         return view('absen.index', compact('absen', 'daysInMonth', 'cabangOptions', 'branches', 'searchBranch'));
     }
-    // public function search(Request $request)
-    // {
-    //     $query = $request->input('query');
-
-    //     $absen = Absen::where('cabang', 'like', '%' . $query . '%')->get();
-    //     $cabangOptions = Absen::pluck('cabang')->unique();
-    //     $daysInMonth = Carbon::now()->daysInMonth;
-
-
-    //     return view('absen.index', compact('absen','cabangOptions','daysInMonth'));
-    // }
-
     public function export()
     {
         try {
@@ -71,18 +59,18 @@ class AbsenController extends Controller
     }
     public function create()
     {
-        return view('absen.create');//hari yang sangat mengasikan
-    }//hari yang sangat mengasikan
-    public function store(Request $request)//hari yang sangat mengasikan
-    {//hari yang sangat mengasikan
-        $request->validate([//hari yang sangat mengasikan
-            'No_absen' => 'required|unique:absen',//hari yang sangat mengasikan
-            'Nama_Karyawan' => 'required',//hari yang sangat mengasikan
-            'cabang' => 'required',//hari yang sangat mengasikan
-            'posisi_jabatan' => 'required',//hari yang sangat mengasikan
-            'tahun' => 'required',//hari yang sangat mengasikan
-            'Bulan' => 'required',//hari yang sangat mengasikan
-        ]);//hari yang sangat mengasikan
+        return view('absen.create');
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'No_absen' => 'required|unique:absen',
+            'Nama_Karyawan' => 'required',
+            'cabang' => 'required',
+            'posisi_jabatan' => 'required',
+            'tahun' => 'required',
+            'Bulan' => 'required',
+        ]);
 
         Absen::create($request->all());
         return redirect()->route('absen.index')
@@ -106,11 +94,19 @@ class AbsenController extends Controller
 
     public function update(Request $request, Absen $absen)
     {
+// dd($absen);
         $request->validate([
+<<<<<<< HEAD
             'Nama_Karyawan' => 'required|array',
             'cabang' => 'required|array',
             'posisi_jabatan' => 'required|array',
             'hari' => 'required|array',
+=======
+            'Nama_Karyawan' => 'nullable',
+            'cabang' => 'nullable',
+            'posisi_jabatan' => 'nullable',
+            'hari' => 'nullable|array',
+>>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
         ]);
 
         try {
@@ -119,41 +115,41 @@ class AbsenController extends Controller
             $total_shift_2 = 0;
             $total_shift_ls = 0;
 
-            foreach ($request->hari as $key => $val) {
-                $dataToUpdate['hari' . $key] = $val;
-                switch ($val) {//why maycodingan sedang lag man
-                    case 1://why maycodingan sedang lag man
-                        $total_shift_1++;//why maycodingan sedang lag man
-                        break;//why maycodingan sedang lag man
-                    case 2://why maycodingan sedang lag man
-                        $total_shift_2++;//why maycodingan sedang lag man
-                        break;//why maycodingan sedang lag man
-                    case 'ls'://why maycodingan sedang lag man
-                        $total_shift_ls++;//why maycodingan sedang lag man
-                        break;//why maycodingan sedang lag man
+            if ($request->has('hari')) {
+                foreach ($request->hari as $key => $val) {
+                    $dataToUpdate['hari' . $key] = $val;
+                    switch ($val) {
+                        case 1:
+                            $total_shift_1++;
+                            break;
+                        case 2:
+                            $total_shift_2++;
+                            break;
+                        case 'ls':
+                            $total_shift_ls++;
+                            break;
+                    }
                 }
-            }
+            } else {
 
+                $dataToUpdate['Nama_Karyawan'] = $request->Nama_Karyawan;
+                $dataToUpdate['cabang'] = $request->cabang;
+                $dataToUpdate['posisi_jabatan'] = $request->posisi_jabatan;
+            }
             $absen->update($dataToUpdate);
             $total_shift_1_jt = $total_shift_1 * 7;
             $total_shift_2_jt = $total_shift_2 * 7;
-            $total_shift_ls = $total_shift_ls * 8;
-            $total_jt = $total_shift_1_jt + $total_shift_2_jt + $total_shift_ls;
+            $total_shift_ls_jt = $total_shift_ls * 8;
+            $total_jt = $total_shift_1_jt + $total_shift_2_jt + $total_shift_ls_jt;
 
             return response()->json([
                 'message' => 'Data absen berhasil diperbarui.',
-                'total_shift_1' => $total_shift_1,
-                'total_shift_2' => $total_shift_2,
-                'total_shift_ls' => $total_shift_ls,
-                'total_shift_1_jt' => $total_shift_1_jt,
-                'total_shift_2_jt' => $total_shift_2_jt,
-                'total_shift_ls' => $total_shift_ls,
-                'total_jt' => $total_jt,
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
     }
+
 
     public function destroy(Absen $absen)
     {
