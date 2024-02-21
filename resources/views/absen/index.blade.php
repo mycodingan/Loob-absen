@@ -186,7 +186,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>penyesuaian</th>
+                                    {{-- <th>Edit</th> --}}
                                     <th>No Absen</th>
                                     <th>Nama Karyawan</th>
                                     <th>Cabang</th>
@@ -208,13 +208,13 @@
                             <tbody>
                                 @foreach ($absen as $data)
                                 <tr>
-                                    <td>
-                                        <p type="button" class="btn btn-warning" onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">📝</p>
-                                    </td>
+                                    {{-- <td>
+                                        <p type="button" class="btn btn-transparent btn-outline-warning" onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">📝</p>
+                                    </td> --}}
                                     <td>{{ $data->No_absen }}</td>
-                                    <td>{{ $data->Nama_Karyawan }}</td>
-                                    <td>{{ $data->cabang }}</td>
-                                    <td>{{ $data->posisi_jabatan }}</td>
+                                    <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">{{ $data->Nama_Karyawan }}</td>
+                                    <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">{{ $data->Nama_Karyawan }}>{{ $data->cabang }}</td>
+                                    <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">{{ $data->Nama_Karyawan }}>{{ $data->posisi_jabatan }}</td>
                                     @php
                                     $total_shift_1 = null;
                                     $total_shift_2 = null;
@@ -310,8 +310,8 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update Data</button>
+                        <p style="color: #888"><small>silahkan clik enter untuk mengubah data yang sudah di perbarui mupun belum</small></p>
+                        <button id="hillang" type="submit" class="btn btn-primary">Update Data</button>
                     </div>
                 </form>
             </div>
@@ -328,7 +328,6 @@ $(document).ready(function() {
         e.preventDefault();
         var formData = $(this).serialize();
         var absen_id = $('#edit_id_Karyawan').val();
-        console.log(formData)
         var url = '{{ route('absen.index') }}/' + absen_id;
         $.ajax({
             type: 'POST',
@@ -336,6 +335,7 @@ $(document).ready(function() {
             data: formData,
             success: function(response) {
                 console.log(response);
+                location.reload(true);
             },
             error: function(error) {
                 console.log(error);
@@ -343,7 +343,7 @@ $(document).ready(function() {
         });
     });
 });
-
+document.getElementById("hillang").style.display = "none";
 function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
     $('#edit_id').val(id);
     $('#edit_id_Karyawan').val(id);
