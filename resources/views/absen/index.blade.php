@@ -213,8 +213,8 @@
                                     </td> --}}
                                     <td>{{ $data->No_absen }}</td>
                                     <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">{{ $data->Nama_Karyawan }}</td>
-                                    <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">{{ $data->Nama_Karyawan }}>{{ $data->cabang }}</td>
-                                    <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">{{ $data->Nama_Karyawan }}>{{ $data->posisi_jabatan }}</td>
+                                    <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')"{{ $data->Nama_Karyawan }}>{{ $data->cabang }}</td>
+                                    <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')"{{ $data->Nama_Karyawan }}>{{ $data->posisi_jabatan }}</td>
                                     @php
                                     $total_shift_1 = null;
                                     $total_shift_2 = null;
@@ -288,7 +288,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editForm" action="{{ route('absen.update', $data->id) }}" method="POST">
+                <form id="editForm" method="POST">
                     @csrf
                     @method('PUT')
 
@@ -323,6 +323,8 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script>
+
+    //untuk melakukan sebuah edit data pada modal  | menggunakan sebuah ajaxa
 $(document).ready(function() {
     $('#editForm').on('submit', function(e) {
         e.preventDefault();
@@ -343,7 +345,9 @@ $(document).ready(function() {
         });
     });
 });
+//untuk perintah di bawah ini saya membuat nya untuk menghilan kan button update data
 document.getElementById("hillang").style.display = "none";
+// syntax di bawah init sebuk code ajaxjyang di gunakan untuk  menerima data saat proses update
 function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
     $('#edit_id').val(id);
     $('#edit_id_Karyawan').val(id);
@@ -352,6 +356,7 @@ function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
     $('#edit_posisi_jabatan').val(posisi_jabatan);
     $('#exampleModal').modal('show');
 }
+//script dibawah ini saya gunakan untk modal yang terdapat pada import data dari excel
     document.addEventListener('DOMContentLoaded', function() {
         var importBtn = document.getElementById('importBtn');
         var importModal = document.getElementById('importModal');
@@ -373,9 +378,11 @@ function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
     });
 
 
+    //code ini di gunakan untuk  agar saat kita melakukan sebuah searchcing bisa langsung searc tampa harus menggunkan button untuk me refresh
     function submitForm() {
         document.getElementById("searchForm").submit();
     }
+    //jika code yang ini saya gunakan untuk membuat sebua pemasukan data pada colom hari ini sebenar nya sebuah edit dengan saya ubah tipedata hari menjadi nulable
     $(document).ready(function() {
         $('.editable').click(function() {
             var $editable = $(this);
@@ -416,31 +423,7 @@ function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
             });
         });
     });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var importBtn = document.getElementById('importBtn');
-        var importModal = document.getElementById('importModal');
-        var closeBtn = document.querySelector('.close');
-        var closeBtnModalFooter = document.querySelector('.modal-footer .closeBtn');
-
-        importBtn.addEventListener('click', function() {
-            importModal.style.display = 'block';
-        });
-
-        closeBtn.addEventListener('click', function() {
-            importModal.style.display = 'none';
-        });
-
-        closeBtnModalFooter.addEventListener('click', function() {
-            importModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target == importModal) {
-                importModal.style.display = 'none';
-            }
-        });
-    });
+    //ini systax java script untuk melakuan search data yang sudah ada utnuk mempermudah pencarian pada setiap cabang
     document.getElementById('searchQuery').addEventListener('change', function() {
         var query = this.value;
         if (query.trim() !== '') {
