@@ -208,12 +208,6 @@
                             <tbody>
                                 @foreach ($absen as $data)
                                 <tr>
-<<<<<<< HEAD
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->No_absen }}</td>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->Nama_Karyawan }}</td>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->cabang }}</td>
-                                    <td contenteditable="true" class="editable_input" data-absen-id="{{ $data->absen }}">{{ $data->posisi_jabatan }}</td>
-=======
                                     {{-- <td>
                                         <p type="button" class="btn btn-transparent btn-outline-warning" onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">📝</p>
                                     </td> --}}
@@ -221,7 +215,6 @@
                                     <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')">{{ $data->Nama_Karyawan }}</td>
                                     <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')"{{ $data->Nama_Karyawan }}>{{ $data->cabang }}</td>
                                     <td onclick="edit_data('{{ $data->id }}', '{{ $data->Nama_Karyawan }}','{{ $data->cabang }}','{{ $data->posisi_jabatan }}')"{{ $data->Nama_Karyawan }}>{{ $data->posisi_jabatan }}</td>
->>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
                                     @php
                                     $total_shift_1 = null;
                                     $total_shift_2 = null;
@@ -247,11 +240,7 @@
                                         <td>{{ $total_shift_ls }}</td>
                                         <td id="total_shift_1_jt">{{ $total_shift_1 * 7 }}</td>
                                         <td id="total_shift_2_jt">{{ $total_shift_2 * 7 }}</td>
-<<<<<<< HEAD
-                                        <td id=" total_shift_ls">{{ $total_shift_ls * 8 }}</td>
-=======
                                         <td id="total_shift_ls">{{ $total_shift_ls * 8 }}</td>
->>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
                                         <td id="total_jt">{{ ($total_shift_1 * 7) + ($total_shift_2 * 7) + ($total_shift_ls * 8) }}</td>
                                         <td>{{ $data->tahun }}</td>
                                         <td>{{ $data->Bulan }}</td>
@@ -275,11 +264,7 @@
                                         @for ($i = 1; $i <= $daysInMonth; $i++) <td><input type="text" class="form-control" name="hari{{ $i }}"></td>
                                             @endfor
                                             <td><input type="text" name="tahun" value="{{ \Carbon\Carbon::now()->year }}"></td>
-<<<<<<< HEAD
-                                            <td><input type="tex" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
-=======
                                             <td><input type="text" name="Bulan" value="{{ \Carbon\Carbon::now()->month }}"></td>
->>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
                                             <td><button type="submit" class="btn btn-primary">Tambah Data</button></td>
                                     </form>
                                 </tr>
@@ -338,8 +323,6 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script>
-<<<<<<< HEAD
-=======
 
     //untuk melakukan sebuah edit data pada modal  | menggunakan sebuah ajaxa
 $(document).ready(function() {
@@ -396,118 +379,11 @@ function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
 
 
     //code ini di gunakan untuk  agar saat kita melakukan sebuah searchcing bisa langsung searc tampa harus menggunkan button untuk me refresh
->>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
     function submitForm() {
         document.getElementById("searchForm").submit();
     }
     //jika code yang ini saya gunakan untuk membuat sebua pemasukan data pada colom hari ini sebenar nya sebuah edit dengan saya ubah tipedata hari menjadi nulable
     $(document).ready(function() {
-<<<<<<< HEAD
-    $('.editable').click(function() {
-        handleEdit($(this), 'select');
-    });
-
-    $('.editable_input').click(function() {
-        handleEdit($(this), 'input');
-    });
-
-    function handleEdit($editable, inputType) {
-        var absen_id = $editable.data('absen-id');
-        var day = $editable.data('day');
-        var currentValue = $editable.find('span').text();
-        var element;
-
-        if (inputType === 'select') {//di jadikan kondisi yang agak lain
-            element = $('<select class="form-control"><option value="1">1</option><option value="2">2</option><option value="ls">LS</option></select>');
-        } else {
-            element = $('<input type="text" class="form-control">');
-        }
-
-        $editable.empty().append(element);
-        element.val(currentValue).focus();
-
-        element.on('change', function() {
-            var selectedValue = $(this).val();
-            updateData(absen_id, day, selectedValue, $editable);
-        });
-
-        if (inputType === 'input') {//buat agar saat enter tinggal langsung click   
-            element.on('keypress', function(event) {
-                if (event.which === 13) {
-                    var selectedValue = $(this).val();
-                    updateData(absen_id, day, selectedValue, $editable);
-                }
-            });
-        }
-    }
-
-    function updateData(absen_id, day, selectedValue, $editable) {
-        $.ajax({
-            url: '{{route('absen.index')}}/' + absen_id,
-            method: 'PUT',
-            data: {
-                _token: '{{ csrf_token() }}',
-                _method: 'PUT',
-                hari: {[day]: selectedValue},
-                Nama_Karyawan: {[day]: selectedValue},
-                cabang: {[day]: selectedValue},
-                posisi_jabatan: {[day]: selectedValue},
-                day: day
-            },
-            success: function(response) {
-                $editable.empty().append('<span>' + selectedValue + '</span>');
-            },
-            error: function(xhr) {
-                alert('Error: Data tidak dapat diperbarui.');
-            }
-        });
-    }
-});
-    document.addEventListener('DOMContentLoaded', function() {
-        var importBtn = document.getElementById('importBtn');
-        var importModal = document.getElementById('importModal');
-        var closeBtn = document.querySelector('.close');
-        var closeBtnModalFooter = document.querySelector('.modal-footer .closeBtn');
-
-        importBtn.addEventListener('click', function() {
-            importModal.style.display = 'block';
-        });
-
-        closeBtn.addEventListener('click', function() {
-            importModal.style.display = 'none';
-        });
-
-        closeBtnModalFooter.addEventListener('click', function() {
-            importModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target == importModal) {
-                importModal.style.display = 'none';
-            }
-        });
-    }); //hayolo mau curi code saya ya tidak semudah itu pergusu
-    document.getElementById('searchQuery').addEventListener('change', function() { //hayolo mau curi code saya ya tidak semudah itu pergusu
-        var query = this.value; //hayolo mau curi code saya ya tidak semudah itu pergusu
-        if (query.trim() !== '') { //hayolo mau curi code saya ya tidak semudah itu pergusu
-            var formData = new FormData(); //hayolo mau curi code saya ya tidak semudah itu pergusu
-            formData.append('query', query); //hayolo mau curi code saya ya tidak semudah itu pergusu
-            fetch('{{ route("absen.search") }}', { //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    method: 'GET', //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    body: formData //hayolo mau curi code saya ya tidak semudah itu pergusu
-                }) //hayolo mau curi code saya ya tidak semudah itu pergusu
-                .then(response => response.text()) //hayolo mau curi code saya ya tidak semudah itu pergusu
-                .then(data => { //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    document.open(); //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    document.write(data); //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    document.close(); //hayolo mau curi code saya ya tidak semudah itu pergusu
-                }) //hayolo mau curi code saya ya tidak semudah itu pergusu
-                .catch(error => { //hayolo mau curi code saya ya tidak semudah itu pergusu
-                    console.error('Error:', error); //hayolo mau curi code saya ya tidak semudah itu pergusu
-                }); //hayolo mau curi code saya ya tidak semudah itu pergusu
-        } //hayolo mau curi code saya ya tidak semudah itu pergusu
-    }); //hayolo mau curi code saya ya tidak semudah itu pergusu
-=======
         $('.editable').click(function() {
             var $editable = $(this);
             var absen_id = $editable.data('absen-id');
@@ -569,10 +445,8 @@ function edit_data(id, Nama_Karyawan, cabang, posisi_jabatan) {
         }
     });
 
->>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
 
 
 </script>
 
 @endsection
-

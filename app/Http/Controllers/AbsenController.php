@@ -96,17 +96,10 @@ class AbsenController extends Controller
     {
 // dd($absen);
         $request->validate([
-<<<<<<< HEAD
-            'Nama_Karyawan' => 'required|array',
-            'cabang' => 'required|array',
-            'posisi_jabatan' => 'required|array',
-            'hari' => 'required|array',
-=======
             'Nama_Karyawan' => 'nullable',
             'cabang' => 'nullable',
             'posisi_jabatan' => 'nullable',
             'hari' => 'nullable|array',
->>>>>>> b533557148a01fc3854e4720c7fcf2eec36b7819
         ]);
 
         try {
